@@ -1,11 +1,12 @@
 {
-  "name": "synthux",
+  "name": "enigma",
   "version": "1.0.0",
-  "description": "AI-powered UX audit in your browser. Open source.",
+  "description": "Enigma — AI-powered UX audit in your browser. Open source.",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node esbuild.config.js",
+    "build:edge": "node esbuild.config.js",
     "build:watch": "node esbuild.config.js --watch",
     "lint": "eslint src/ extension/",
     "lint:ext": "npx web-ext lint --source-dir=extension/",

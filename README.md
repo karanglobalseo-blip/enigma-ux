@@ -23,7 +23,7 @@
 
 ## What is synthux?
 
-synthux is an open-source Chrome extension that evaluates web pages using **synthetic user profiles** and **Nielsen's 10 Usability Heuristics** — powered by local or cloud AI.
+synthux is an open-source Chromium extension for Chrome and Microsoft Edge that evaluates web pages using **synthetic user profiles** and **Nielsen's 10 Usability Heuristics** — powered by local or cloud AI.
 
 Run locally with Ollama for free, or use your own API key with Gemini, OpenAI, or Claude.
 
@@ -99,17 +99,19 @@ No local setup needed. Just enter your API key in Settings:
 
 ### Install Extension
 
-**Option 1 — Chrome Web Store** (recommended)
+**Option 1 — Chrome Web Store** (recommended for Chrome)
 
 [**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/synthux/cgldigellmojaejmnhjhpbfccncbmnhm)
 
-**Option 2 — From Source** (for development)
+**Option 2 — From Source (Chrome or Edge)**
 
 1. Clone: `git clone https://github.com/synthuxapp/synthux.git`
-2. Run `npm install && npm run build`
-3. Open Chrome → `chrome://extensions`
+2. Run `npm install && npm run build` for Chrome, or `npm install && npm run build:edge` for Edge
+3. Open `chrome://extensions` in Chrome or `edge://extensions` in Microsoft Edge
 4. Enable **Developer mode**
-5. Click **Load unpacked** → Select the `extension/` folder
+5. Click **Load unpacked** and select the repository's `extension/` folder
+
+The Edge build uses the same Chromium-compatible Manifest V3 bundle as Chrome. Edge 116 or later is recommended because synthux uses the browser Side Panel API.
 
 ### Analyze
 
@@ -225,7 +227,7 @@ npm run lint:ext
 npm run format
 ```
 
-After building, load the `extension/` folder in Chrome as an unpacked extension.
+After building, load the `extension/` folder in Chrome or Microsoft Edge as an unpacked extension.
 
 ## Contributing
 
