@@ -1,7 +1,7 @@
 {
-  "name": "enigma",
+  "name": "enigma-ux",
   "version": "1.0.0",
-  "description": "Enigma — AI-powered UX audit in your browser. Open source.",
+  "description": "EnigmaUX — AI-powered UX audit in your browser. Open source.",
   "private": true,
   "type": "module",
   "scripts": {

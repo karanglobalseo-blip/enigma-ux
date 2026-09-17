@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="extension/assets/logo.svg" />
     <source media="(prefers-color-scheme: light)" srcset="extension/assets/logo-dark.svg" />
-    <img src="extension/assets/logo-dark.svg" alt="synthux" height="48" />
+    <img src="extension/assets/logo-dark.svg" alt="EnigmaUX" height="48" />
   </picture>
 </p>
 
@@ -21,9 +21,9 @@
 
 ---
 
-## What is synthux?
+## What is EnigmaUX?
 
-synthux is an open-source Chromium extension for Chrome and Microsoft Edge that evaluates web pages using **synthetic user profiles** and **Nielsen's 10 Usability Heuristics** — powered by local or cloud AI.
+EnigmaUX is an open-source Chromium extension for Chrome and Microsoft Edge that evaluates web pages using **synthetic user profiles** and **Nielsen's 10 Usability Heuristics** — powered by local or cloud AI.
 
 Run locally with Ollama for free, or use your own API key with Gemini, OpenAI, or Claude.
 
