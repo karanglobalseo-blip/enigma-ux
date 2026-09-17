@@ -14,6 +14,7 @@ import { runAccessibilityChecks } from './accessibility.js';
 import { generateReport } from './report-generator.js';
 import { calculateCost, aggregateCosts } from './cost-calculator.js';
 import { checkVisionSupport } from './providers.js';
+import { mergeResults, normalizeResult } from './result-merger.js';
 
 export class Analyzer {
   constructor(options = {}) {
@@ -28,10 +29,27 @@ export class Analyzer {
     // Multi-provider support
     this.providerId = options.provider || 'ollama';
     this.apiKey = options.apiKey || '';
+    this.dualMode = options.dualMode === true;
+    this.textModel = options.textModel || this.model;
+    this.visionModel = options.visionModel || this.model;
+    this.textProvider = options.textProvider || this.providerId;
+    this.visionProvider = options.visionProvider || this.providerId;
+    this.textEndpoint = options.textEndpoint || this.endpoint;
+    this.visionEndpoint = options.visionEndpoint || this.endpoint;
+    this.textApiKey = options.textApiKey ?? this.apiKey;
+    this.visionApiKey = options.visionApiKey ?? this.apiKey;
 
     this.client = new AIClient(this.endpoint, {
       provider: this.providerId,
       apiKey: this.apiKey,
+    });
+    this.textClient = new AIClient(this.textEndpoint, {
+      provider: this.textProvider,
+      apiKey: this.textApiKey,
+    });
+    this.visionClient = new AIClient(this.visionEndpoint, {
+      provider: this.visionProvider,
+      apiKey: this.visionApiKey,
     });
   }
 
@@ -42,7 +60,11 @@ export class Analyzer {
     const { url, title, pageData, screenshot, timestamp } = input;
 
     // Check vision capability before sending screenshots
-    const visionSupported = await checkVisionSupport(this.providerId, this.model, this.endpoint);
+    const visionSupported = await checkVisionSupport(
+      this.dualMode ? this.visionProvider : this.providerId,
+      this.dualMode ? this.visionModel : this.model,
+      this.dualMode ? this.visionEndpoint : this.endpoint
+    );
     const safeScreenshot = visionSupported ? screenshot : null;
     if (screenshot && !visionSupported) {
       console.info(`[enigmaux] Model "${this.model}" does not support vision — skipping screenshot.`);
@@ -128,13 +150,33 @@ export class Analyzer {
 
         try {
           console.info(`[enigmaux] → Calling AI: ${heuristic.name.en} (model: ${this.model}, provider: ${this.providerId}, vision: ${!!safeScreenshot})`);
-          const response = await this.client.evaluate(prompt, {
-            model: this.model,
+          const requestOptions = {
             systemPrompt: profile.systemPrompt,
             temperature: 0.3,
-            format: 'json',
-            images: safeScreenshot ? [safeScreenshot] : []
-          });
+            format: 'json'
+          };
+          let response;
+          if (this.dualMode && safeScreenshot) {
+            // Both perspectives are independent so a slow/failing vision request
+            // does not prevent the text result from being used.
+            const [textResponse, visionResponse] = await Promise.all([
+              this.textClient.evaluate(prompt, { ...requestOptions, model: this.textModel, images: [] }),
+              this.visionClient.evaluate(prompt, { ...requestOptions, model: this.visionModel, images: [safeScreenshot] })
+            ]);
+            const successful = [
+              textResponse.success ? normalizeResult(parseEvaluation(textResponse.result), 'text') : null,
+              visionResponse.success ? normalizeResult(parseEvaluation(visionResponse.result), 'vision') : null
+            ].filter(Boolean);
+            response = successful.length
+              ? { success: true, result: mergeResults(successful), meta: { dual: true, sources: successful.map(r => r.source) } }
+              : { success: false, error: textResponse.error || visionResponse.error || 'Dual evaluation failed' };
+          } else {
+            response = await this.client.evaluate(prompt, {
+              ...requestOptions,
+              model: this.model,
+              images: safeScreenshot ? [safeScreenshot] : []
+            });
+          }
 
           if (response.success) {
             const evaluation = parseEvaluation(response.result);
@@ -142,7 +184,10 @@ export class Analyzer {
               heuristicId: heuristic.id,
               heuristicName: heuristic.name,
               ...evaluation,
-              _meta: response.meta || {}
+              _meta: response.meta || {},
+              source: this.dualMode && safeScreenshot ? 'text+vision' : (safeScreenshot ? 'vision' : 'text'),
+              confidence: response.result?.confidence
+                ?? (this.dualMode && safeScreenshot ? 70 : (safeScreenshot ? 70 : 60))
             });
             console.info(`[enigmaux] → ✓ Score: ${evaluation.score}, Issues: ${evaluation.issues.length}`);
           } else {

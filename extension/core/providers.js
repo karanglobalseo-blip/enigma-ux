@@ -4,7 +4,7 @@
  * Adapter pattern for multiple AI providers.
  * Each provider normalizes request/response to a common format.
  * 
- * Supported: Ollama (local), OpenAI, Google Gemini, Anthropic Claude
+ * Supported: Ollama (local), OpenAI, NVIDIA NIM, Google Gemini, Anthropic Claude
  */
 
 // ─── Provider Registry ──────────────────────────────────────────────────────
@@ -231,6 +231,85 @@ export const PROVIDERS = {
       try {
         const res = await fetch(`${endpoint || this.defaultEndpoint}/v1/models`, {
           headers: { 'Authorization': `Bearer ${apiKey}` },
+          signal: AbortSignal.timeout(8000)
+        });
+        return res.ok;
+      } catch { return false; }
+    }
+  },
+
+  nvidia: {
+    id: 'nvidia',
+    name: 'NVIDIA NIM',
+    icon: '🟩',
+    authType: 'bearer',
+    defaultEndpoint: 'https://integrate.api.nvidia.com',
+    models: [
+      { id: 'meta/llama-3.2-90b-vision-instruct', name: 'Llama 3.2 90B Vision Instruct' },
+      { id: 'meta/llama-3.1-405b-instruct', name: 'Llama 3.1 405B Instruct' },
+      { id: 'mistralai/mistral-large-2-instruct', name: 'Mistral Large 2 Instruct' },
+    ],
+    modelsFetchable: true,
+
+    buildRequest(prompt, model, options = {}) {
+      const content = [{ type: 'text', text: prompt }];
+      (options.images || []).filter(Boolean).forEach(image => {
+        content.push({ type: 'image_url', image_url: { url: image, detail: 'low' } });
+      });
+      return {
+        url: `${options.endpoint || this.defaultEndpoint}/v1/chat/completions`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${options.apiKey || ''}`
+        },
+        body: {
+          model,
+          messages: [
+            ...(options.systemPrompt ? [{ role: 'system', content: options.systemPrompt }] : []),
+            { role: 'user', content: content.length > 1 ? content : prompt }
+          ],
+          temperature: options.temperature ?? 0.3,
+          max_tokens: options.maxTokens || 2048,
+          ...(options.format === 'json' ? { response_format: { type: 'json_object' } } : {})
+        }
+      };
+    },
+
+    parseResponse(data) {
+      const content = data.choices?.[0]?.message?.content || '';
+      const meta = {
+        model: data.model,
+        inputTokens: data.usage?.prompt_tokens || 0,
+        outputTokens: data.usage?.completion_tokens || 0
+      };
+      try {
+        return { success: true, result: JSON.parse(content), meta };
+      } catch {
+        return { success: true, result: { raw: content }, meta };
+      }
+    },
+
+    async fetchModels(endpoint, apiKey) {
+      try {
+        const res = await fetch(`${endpoint || this.defaultEndpoint}/v1/models`, {
+          headers: { Authorization: `Bearer ${apiKey || ''}` },
+          signal: AbortSignal.timeout(8000)
+        });
+        if (!res.ok) return this.models;
+        const data = await res.json();
+        return (data.data || []).map(m => ({
+          id: m.id,
+          name: m.id,
+          contextLength: m.max_model_len || m.context_length
+        })).sort((a, b) => a.name.localeCompare(b.name));
+      } catch { return this.models; }
+    },
+
+    async ping(endpoint, apiKey) {
+      try {
+        const res = await fetch(`${endpoint || this.defaultEndpoint}/v1/models`, {
+          headers: { Authorization: `Bearer ${apiKey || ''}` },
           signal: AbortSignal.timeout(8000)
         });
         return res.ok;

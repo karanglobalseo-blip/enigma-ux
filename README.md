@@ -25,11 +25,12 @@
 
 EnigmaUX is an open-source Chromium extension for Chrome and Microsoft Edge that evaluates web pages using **synthetic user profiles** and **Nielsen's 10 Usability Heuristics** — powered by local or cloud AI.
 
-Run locally with Ollama for free, or use your own API key with Gemini, OpenAI, or Claude.
+Run locally with Ollama for free, or use your own API key with Gemini, OpenAI, NVIDIA NIM, or Claude.
 
 ## Features
 
-- **Multi-Provider AI** — Ollama (local), Google Gemini, OpenAI GPT-5, Anthropic Claude
+- **Multi-Provider AI** — Ollama (local), Google Gemini, OpenAI GPT-5, NVIDIA NIM, Anthropic Claude
+- **Dual-Model Analysis** — Optionally run a local text model and NVIDIA NIM vision model in parallel, then merge their findings deterministically
 - **Vision Analysis** — Full-page screenshot capture for visual layout evaluation
 - **Nielsen's 10 Heuristics** — Industry-standard UX evaluation framework
 - **Synthetic User Profiles** — 3 built-in + up to 5 custom personas (age, tech level, accessibility needs, goals)
@@ -132,6 +133,11 @@ When enabled, Enigma UX captures a full-page screenshot and sends it alongside t
 - **Typography** — Is text readable at appropriate sizes?
 
 Toggle in **Settings → Analysis → Screenshot Analysis**.
+
+For complementary text and visual reasoning, enable **Settings → Analysis → Dual-model analysis**.
+Configure the text model (typically Ollama) and vision model (typically NVIDIA NIM), then provide
+the NVIDIA API key. The extension keeps the text and vision findings labeled by source and can
+return a partial report if one provider is unavailable.
 
 ## Flow Builder
 

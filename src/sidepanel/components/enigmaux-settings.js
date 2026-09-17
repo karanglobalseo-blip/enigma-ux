@@ -22,6 +22,12 @@ export class EnigmaUXSettings extends LitElement {
     providerId: { type: String },
     apiKey: { type: String },
     enableVision: { type: Boolean },
+    dualMode: { type: Boolean },
+    textProvider: { type: String },
+    visionProvider: { type: String },
+    textModel: { type: String },
+    visionModel: { type: String },
+    visionApiKey: { type: String },
     _saved: { type: Boolean, state: true },
     _customProfiles: { type: Array, state: true },
     _showProfileForm: { type: Boolean, state: true }
@@ -445,6 +451,12 @@ export class EnigmaUXSettings extends LitElement {
     this.providerId = 'ollama';
     this.apiKey = '';
     this.enableVision = true;
+    this.dualMode = false;
+    this.textProvider = 'ollama';
+    this.visionProvider = 'nvidia';
+    this.textModel = 'gemma4:31b';
+    this.visionModel = 'nvidia/llama-3.2-90b-vision-instruct';
+    this.visionApiKey = '';
     this._saved = false;
     this._copiedCmd = '';
     this._customProfiles = [];
@@ -482,6 +494,12 @@ export class EnigmaUXSettings extends LitElement {
         apiKey_openai: '',
         apiKey_gemini: '',
         apiKey_claude: '',
+        apiKey_nvidia: '',
+        dualMode: false,
+        textProvider: 'ollama',
+        visionProvider: 'nvidia',
+        textModel: 'gemma4:31b',
+        visionModel: 'nvidia/llama-3.2-90b-vision-instruct',
         enableVision: true
       });
       this.endpoint = settings.ollamaEndpoint;
@@ -491,6 +509,12 @@ export class EnigmaUXSettings extends LitElement {
       // Load provider-specific API key
       this.apiKey = settings[`apiKey_${this.providerId}`] || settings.apiKey || '';
       this.enableVision = settings.enableVision !== false; // default true
+      this.dualMode = settings.dualMode === true;
+      this.textProvider = settings.textProvider;
+      this.visionProvider = settings.visionProvider;
+      this.textModel = settings.textModel;
+      this.visionModel = settings.visionModel;
+      this.visionApiKey = settings.apiKey_nvidia || '';
 
       // Load provider-specific models
       this._updateModelsForProvider();
@@ -617,12 +641,18 @@ export class EnigmaUXSettings extends LitElement {
         language: this.language,
         providerId: this.providerId,
         apiKey: this.apiKey,
-        enableVision: this.enableVision
+        enableVision: this.enableVision,
+        dualMode: this.dualMode,
+        textProvider: this.textProvider,
+        visionProvider: this.visionProvider,
+        textModel: this.textModel,
+        visionModel: this.visionModel
       };
       // Also save key per-provider so it persists across switches
       if (this.providerId !== 'ollama' && this.apiKey) {
         saveData[`apiKey_${this.providerId}`] = this.apiKey;
       }
+      if (this.visionApiKey) saveData.apiKey_nvidia = this.visionApiKey;
       await chrome.runtime.sendMessage({
         type: 'SAVE_SETTINGS',
         payload: saveData
@@ -719,6 +749,7 @@ export class EnigmaUXSettings extends LitElement {
       case 'openai': return html`Get your key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a>`;
       case 'gemini': return html`Get your key at <a href="https://aistudio.google.com/apikey" target="_blank">AI Studio</a>`;
       case 'claude': return html`Get your key at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>`;
+      case 'nvidia': return html`Get your key at <a href="https://build.nvidia.com/" target="_blank">build.nvidia.com</a>`;
       default: return '';
     }
   }
@@ -877,6 +908,49 @@ export class EnigmaUXSettings extends LitElement {
 
       <div class="section">
         <div class="section-header">Analysis</div>
+        <div class="settings-card" style="margin-bottom: 10px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <div style="font-size: 13px; font-weight: 500; color: var(--sx-text-primary, #ededf0);">Dual-model analysis</div>
+              <div style="font-size: 11px; color: var(--sx-text-tertiary, #8a8a96); margin-top: 2px;">Run a local text model and a vision model in parallel</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" .checked="${this.dualMode}" @change="${(e) => { this.dualMode = e.target.checked; this._autoSave(); }}" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          ${this.dualMode ? html`
+            <div style="border-top: 1px solid var(--sx-border, rgba(255,255,255,0.06)); margin-top: 12px; padding-top: 12px;">
+              <div class="field">
+                <label class="field-label">Text provider</label>
+                <select class="field-select" .value="${this.textProvider}" @change="${(e) => { this.textProvider = e.target.value; this._autoSave(); }}">
+                  <option value="ollama">🖥️ Ollama (Local)</option>
+                  <option value="nvidia">🟢 NVIDIA NIM</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label">Text model</label>
+                <input class="field-input" .value="${this.textModel}" @input="${(e) => this.textModel = e.target.value}" @blur="${() => this._autoSave()}" placeholder="gemma4:31b" />
+              </div>
+              <div class="field">
+                <label class="field-label">Vision provider</label>
+                <select class="field-select" .value="${this.visionProvider}" @change="${(e) => { this.visionProvider = e.target.value; this._autoSave(); }}">
+                  <option value="nvidia">🟢 NVIDIA NIM</option>
+                  <option value="ollama">🖥️ Ollama (Local)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="field-label">Vision model</label>
+                <input class="field-input" .value="${this.visionModel}" @input="${(e) => this.visionModel = e.target.value}" @blur="${() => this._autoSave()}" placeholder="nvidia/llama-3.2-90b-vision-instruct" />
+              </div>
+              <div class="field">
+                <label class="field-label">NVIDIA API key</label>
+                <input class="field-input api-key" type="password" .value="${this.visionApiKey}" @input="${(e) => this.visionApiKey = e.target.value}" @blur="${() => this._autoSave()}" placeholder="nvapi-..." />
+              </div>
+              <div class="api-key-hint">NVIDIA NIM uses the OpenAI-compatible endpoint and may be subject to trial quotas.</div>
+            </div>
+          ` : ''}
+        </div>
         <div class="settings-card" style="display: flex; align-items: center; justify-content: space-between;">
           <div>
             <div style="font-size: 13px; font-weight: 500; color: var(--sx-text-primary, #ededf0);">Screenshot Analysis</div>

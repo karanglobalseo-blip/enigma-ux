@@ -16,6 +16,7 @@
   "host_permissions": [
     "http://localhost:11434/*",
     "https://api.openai.com/*",
+    "https://integrate.api.nvidia.com/*",
     "https://generativelanguage.googleapis.com/*",
     "https://api.anthropic.com/*",
     "https://raw.githubusercontent.com/*",

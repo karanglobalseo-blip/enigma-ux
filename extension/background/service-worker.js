@@ -80,7 +80,10 @@ async function checkOllamaConnection() {
       ollamaEndpoint: 'http://localhost:11434',
       ollamaModel: 'gemma4:31b',
       providerId: 'ollama',
-      apiKey: ''
+      apiKey: '',
+      dualMode: false,
+      textModel: '',
+      visionModel: ''
     });
 
     const client = new AIClient(settings.ollamaEndpoint, {
@@ -294,7 +297,14 @@ async function handleStartAnalysis(options) {
       analysisMode: 'deep',
       providerId: 'ollama',
       apiKey: '',
-      enableVision: true
+      enableVision: true,
+      dualMode: false,
+      textProvider: 'ollama',
+      visionProvider: 'nvidia',
+      textModel: 'gemma4:31b',
+      visionModel: 'nvidia/llama-3.2-90b-vision-instruct',
+      nvidiaEndpoint: 'https://integrate.api.nvidia.com',
+      apiKey_nvidia: ''
     });
 
     const mode = options?.mode || settings.analysisMode;
@@ -310,6 +320,19 @@ async function handleStartAnalysis(options) {
       heuristics: customHeuristics,
       provider: settings.providerId,
       apiKey: settings.apiKey,
+      dualMode: settings.dualMode === true,
+      textProvider: settings.textProvider || settings.providerId,
+      visionProvider: settings.visionProvider || settings.providerId,
+      textModel: settings.textModel || settings.ollamaModel,
+      visionModel: settings.visionModel || settings.ollamaModel,
+      textEndpoint: settings.textEndpoint || (settings.textProvider === 'nvidia'
+        ? 'https://integrate.api.nvidia.com'
+        : settings.ollamaEndpoint),
+      visionEndpoint: settings.visionEndpoint || settings.nvidiaEndpoint,
+      textApiKey: settings.textProvider === 'nvidia'
+        ? (settings.apiKey_nvidia || settings.apiKey)
+        : settings.apiKey,
+      visionApiKey: settings.apiKey_nvidia || settings.apiKey,
       onProgress: (progress) => {
         currentAnalysis.progress = progress;
         // Broadcast progress to side panel
