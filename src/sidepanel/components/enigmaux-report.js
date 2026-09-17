@@ -862,6 +862,12 @@ export class EnigmaUXReport extends LitElement {
               ${isExpanded ? html`
                 <div class="heuristic-detail">
                   <div class="heuristic-summary">${ev.summary}</div>
+                  ${ev.error ? html`
+                    <div class="error-hint" style="margin: 8px 0;">
+                      <span class="error-hint-dot"></span>
+                      <div><strong>AI evaluation failed:</strong> ${ev.error}</div>
+                    </div>
+                  ` : ''}
                   ${filteredIssues.map(issue => html`
                     <div class="issue-item"
                       @mouseenter="${() => this._highlightIssue(issue)}"

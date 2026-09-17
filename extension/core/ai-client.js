@@ -137,7 +137,17 @@ export class AIClient {
           };
         }
 
-        const data = await response.json();
+        const responseText = await response.text();
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          const preview = responseText.replace(/\s+/g, ' ').trim().slice(0, 240);
+          return {
+            success: false,
+            error: `${this.provider.name} returned a non-JSON response. Check the endpoint and model configuration.${preview ? ` Response: ${preview}` : ''}`
+          };
+        }
 
         // Parse using provider adapter
         const parsed = this.provider.parseResponse(data);

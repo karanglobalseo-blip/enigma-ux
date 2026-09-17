@@ -1774,6 +1774,12 @@ Evaluate from YOUR perspective \u2014 not as a generic user.`}var te=class exten
               ${o?n`
                 <div class="heuristic-detail">
                   <div class="heuristic-summary">${i.summary}</div>
+                  ${i.error?n`
+                    <div class="error-hint" style="margin: 8px 0;">
+                      <span class="error-hint-dot"></span>
+                      <div><strong>AI evaluation failed:</strong> ${i.error}</div>
+                    </div>
+                  `:""}
                   ${s.map(a=>n`
                     <div class="issue-item"
                       @mouseenter="${()=>this._highlightIssue(a)}"
