@@ -27,6 +27,7 @@ export class EnigmaUXSettings extends LitElement {
     visionProvider: { type: String },
     textModel: { type: String },
     visionModel: { type: String },
+    textApiKey: { type: String },
     visionApiKey: { type: String },
     _saved: { type: Boolean, state: true },
     _customProfiles: { type: Array, state: true },
@@ -456,6 +457,7 @@ export class EnigmaUXSettings extends LitElement {
     this.visionProvider = 'nvidia';
     this.textModel = 'gemma4:31b';
     this.visionModel = 'nvidia/llama-3.2-90b-vision-instruct';
+    this.textApiKey = '';
     this.visionApiKey = '';
     this._saved = false;
     this._copiedCmd = '';
@@ -514,7 +516,8 @@ export class EnigmaUXSettings extends LitElement {
       this.visionProvider = settings.visionProvider;
       this.textModel = settings.textModel;
       this.visionModel = settings.visionModel;
-      this.visionApiKey = settings.apiKey_nvidia || '';
+      this.textApiKey = settings[`apiKey_${this.textProvider}`] || '';
+      this.visionApiKey = settings[`apiKey_${this.visionProvider}`] || '';
 
       // Load provider-specific models
       this._updateModelsForProvider();
@@ -604,12 +607,25 @@ export class EnigmaUXSettings extends LitElement {
     } catch {
       this.apiKey = '';
     }
+
     this._updateModelsForProvider();
     this._autoSave();
     // Auto-test if key exists
     if (this.apiKey && this.providerId !== 'ollama') {
       this._testConnection();
     }
+  }
+
+  async _onDualProviderChange(role, e) {
+    const provider = e.target.value;
+    this[`${role}Provider`] = provider;
+    try {
+      const stored = await chrome.storage.local.get(`apiKey_${provider}`);
+      this[`${role}ApiKey`] = stored[`apiKey_${provider}`] || '';
+    } catch {
+      this[`${role}ApiKey`] = '';
+    }
+    this._autoSave();
   }
 
   _onApiKeyBlur() {
@@ -646,7 +662,11 @@ export class EnigmaUXSettings extends LitElement {
         textProvider: this.textProvider,
         visionProvider: this.visionProvider,
         textModel: this.textModel,
-        visionModel: this.visionModel
+        visionModel: this.visionModel,
+        ...(this.textProvider !== 'ollama' && this.textApiKey
+          ? { [`apiKey_${this.textProvider}`]: this.textApiKey } : {}),
+        ...(this.visionProvider !== 'ollama' && this.visionApiKey
+          ? { [`apiKey_${this.visionProvider}`]: this.visionApiKey } : {})
       };
       // Also save key per-provider so it persists across switches
       if (this.providerId !== 'ollama' && this.apiKey) {
@@ -921,33 +941,16 @@ export class EnigmaUXSettings extends LitElement {
           </div>
           ${this.dualMode ? html`
             <div style="border-top: 1px solid var(--sx-border, rgba(255,255,255,0.06)); margin-top: 12px; padding-top: 12px;">
-              <div class="field">
-                <label class="field-label">Text provider</label>
-                <select class="field-select" .value="${this.textProvider}" @change="${(e) => { this.textProvider = e.target.value; this._autoSave(); }}">
-                  <option value="ollama">🖥️ Ollama (Local)</option>
-                  <option value="nvidia">🟢 NVIDIA NIM</option>
-                </select>
-              </div>
+              ${this._renderDualProviderField('text')}
               <div class="field">
                 <label class="field-label">Text model</label>
                 <input class="field-input" .value="${this.textModel}" @input="${(e) => this.textModel = e.target.value}" @blur="${() => this._autoSave()}" placeholder="gemma4:31b" />
               </div>
-              <div class="field">
-                <label class="field-label">Vision provider</label>
-                <select class="field-select" .value="${this.visionProvider}" @change="${(e) => { this.visionProvider = e.target.value; this._autoSave(); }}">
-                  <option value="nvidia">🟢 NVIDIA NIM</option>
-                  <option value="ollama">🖥️ Ollama (Local)</option>
-                </select>
-              </div>
+              ${this._renderDualProviderField('vision')}
               <div class="field">
                 <label class="field-label">Vision model</label>
                 <input class="field-input" .value="${this.visionModel}" @input="${(e) => this.visionModel = e.target.value}" @blur="${() => this._autoSave()}" placeholder="nvidia/llama-3.2-90b-vision-instruct" />
               </div>
-              <div class="field">
-                <label class="field-label">NVIDIA API key</label>
-                <input class="field-input api-key" type="password" .value="${this.visionApiKey}" @input="${(e) => this.visionApiKey = e.target.value}" @blur="${() => this._autoSave()}" placeholder="nvapi-..." />
-              </div>
-              <div class="api-key-hint">NVIDIA NIM uses the OpenAI-compatible endpoint and may be subject to trial quotas.</div>
             </div>
           ` : ''}
         </div>
@@ -980,6 +983,38 @@ export class EnigmaUXSettings extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  _renderDualProviderField(role) {
+    const providerId = this[`${role}Provider`];
+    const apiKey = this[`${role}ApiKey`];
+    const provider = getProvider(providerId);
+    const providers = getProviderList();
+    return html`
+      <div class="field">
+        <label class="field-label">${role === 'text' ? 'Text' : 'Vision'} provider</label>
+        <select class="field-select" .value="${providerId}" @change="${(e) => this._onDualProviderChange(role, e)}">
+          ${providers.map(p => html`<option value="${p.id}" ?selected="${p.id === providerId}">${p.icon} ${p.name}</option>`)}
+        </select>
+      </div>
+      ${provider?.authType !== 'none' ? html`
+        <div class="field">
+          <label class="field-label">${role === 'text' ? 'Text' : 'Vision'} API key</label>
+          <input class="field-input api-key" type="password" .value="${apiKey}" @input="${(e) => this[`${role}ApiKey`] = e.target.value}" @blur="${() => this._autoSave()}" placeholder="Enter API key..." />
+          <div class="api-key-hint">${this._getApiKeyHintForProvider(providerId)}</div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  _getApiKeyHintForProvider(providerId) {
+    switch (providerId) {
+      case 'openai': return html`Get your key at <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a>`;
+      case 'gemini': return html`Get your key at <a href="https://aistudio.google.com/apikey" target="_blank">AI Studio</a>`;
+      case 'claude': return html`Get your key at <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>`;
+      case 'nvidia': return html`Get your key at <a href="https://build.nvidia.com/" target="_blank">build.nvidia.com</a>`;
+      default: return 'This provider does not require an API key.';
+    }
   }
 }
 

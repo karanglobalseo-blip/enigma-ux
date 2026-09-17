@@ -11,6 +11,7 @@
 
 import { AIClient } from '../core/ai-client.js';
 import { Analyzer } from '../core/analyzer.js';
+import { getProvider } from '../core/providers.js';
 import { captureScreenshot } from '../core/screenshot.js';
 import { FlowManager } from '../core/flow-manager.js';
 
@@ -304,7 +305,10 @@ async function handleStartAnalysis(options) {
       textModel: 'gemma4:31b',
       visionModel: 'nvidia/llama-3.2-90b-vision-instruct',
       nvidiaEndpoint: 'https://integrate.api.nvidia.com',
-      apiKey_nvidia: ''
+      apiKey_nvidia: '',
+      apiKey_openai: '',
+      apiKey_gemini: '',
+      apiKey_claude: ''
     });
 
     const mode = options?.mode || settings.analysisMode;
@@ -325,14 +329,14 @@ async function handleStartAnalysis(options) {
       visionProvider: settings.visionProvider || settings.providerId,
       textModel: settings.textModel || settings.ollamaModel,
       visionModel: settings.visionModel || settings.ollamaModel,
-      textEndpoint: settings.textEndpoint || (settings.textProvider === 'nvidia'
-        ? 'https://integrate.api.nvidia.com'
-        : settings.ollamaEndpoint),
-      visionEndpoint: settings.visionEndpoint || settings.nvidiaEndpoint,
-      textApiKey: settings.textProvider === 'nvidia'
-        ? (settings.apiKey_nvidia || settings.apiKey)
-        : settings.apiKey,
-      visionApiKey: settings.apiKey_nvidia || settings.apiKey,
+      textEndpoint: settings.textEndpoint || (settings.textProvider === 'ollama'
+        ? settings.ollamaEndpoint
+        : getProvider(settings.textProvider || settings.providerId).defaultEndpoint),
+      visionEndpoint: settings.visionEndpoint || (settings.visionProvider === 'ollama'
+        ? settings.ollamaEndpoint
+        : getProvider(settings.visionProvider || settings.providerId).defaultEndpoint),
+      textApiKey: settings[`apiKey_${settings.textProvider}`] || settings.apiKey || '',
+      visionApiKey: settings[`apiKey_${settings.visionProvider}`] || settings.apiKey || '',
       onProgress: (progress) => {
         currentAnalysis.progress = progress;
         // Broadcast progress to side panel
