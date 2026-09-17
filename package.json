@@ -1,7 +1,7 @@
 {
   "name": "enigma-ux",
   "version": "1.0.0",
-  "description": "EnigmaUX — AI-powered UX audit in your browser. Open source.",
+  "description": "Enigma UX — AI-powered UX audit in your browser. Open source.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -25,15 +25,15 @@
     "synthetic-users",
     "open-source"
   ],
-  "author": "synthuxapp",
+  "author": "karanglobalseo-blip",
   "license": "MIT",
-  "homepage": "https://synthux.app",
+  "homepage": "https://github.com/karanglobalseo-blip/enigma-ux",
   "repository": {
     "type": "git",
-    "url": "https://github.com/synthuxapp/synthux.git"
+    "url": "https://github.com/karanglobalseo-blip/enigma-ux.git"
   },
   "bugs": {
-    "url": "https://github.com/synthuxapp/synthux/issues"
+    "url": "https://github.com/karanglobalseo-blip/enigma-ux/issues"
   },
   "devDependencies": {
     "axe-core": "^4.11.4",

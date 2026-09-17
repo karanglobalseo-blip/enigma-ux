@@ -62,12 +62,12 @@ const translations = {
     privacyReadMore: 'Read our Privacy Policy',
     ossTitle: 'Open Source',
     ossSubtitle: 'Built in the open. Contributions welcome.',
-    ossDesc: 'synthux is MIT licensed. Fork it, extend it, make it yours.',
+    ossDesc: 'Enigma UX is MIT licensed. Fork it, extend it, make it yours.',
     ossCta: 'Star on GitHub',
     ossContribute: 'Contributing Guide',
     worksWithLabel: 'Works with',
-    supportTitle: 'Support synthux development',
-    supportDesc: 'If you find synthux useful, consider supporting its development.',
+    supportTitle: 'Support Enigma UX development',
+    supportDesc: 'If you find Enigma UX useful, consider supporting its development.',
     footerTagline: 'AI-powered UX audit.',
     footerResources: 'Resources',
     footerLegal: 'Legal',
@@ -81,7 +81,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: 'Issues',
     footerContributing: 'Contributing',
-    footerCopyright: '\u00a9 2026 synthux. Open source under MIT License.',
+    footerCopyright: '\u00a9 2026 Enigma UX. Open source under MIT License.',
   },
   tr: {
     navFeatures: '\u00d6zellikler',
@@ -146,12 +146,12 @@ const translations = {
     privacyReadMore: 'Gizlilik Politikam\u0131z\u0131 Okuyun',
     ossTitle: 'A\u00e7\u0131k Kaynak',
     ossSubtitle: 'A\u00e7\u0131k olarak in\u015fa edildi. Katk\u0131lar\u0131n\u0131z\u0131 bekliyoruz.',
-    ossDesc: 'synthux MIT lisans\u0131 alt\u0131ndad\u0131r. Fork\'lay\u0131n, geni\u015fletin, kendinize uyarlay\u0131n.',
+    ossDesc: 'Enigma UX MIT lisans\u0131 alt\u0131ndad\u0131r. Fork\'lay\u0131n, geni\u015fletin, kendinize uyarlay\u0131n.',
     ossCta: 'GitHub\'da Y\u0131ld\u0131zlay\u0131n',
     ossContribute: 'Katk\u0131 Rehberi',
     worksWithLabel: 'Desteklenen Platformlar',
-    supportTitle: 'synthux geli\u015ftirmeye destek olun',
-    supportDesc: 'synthux\'u faydal\u0131 buluyorsan\u0131z, geli\u015ftirmeyi desteklemeyi d\u00fc\u015f\u00fcnebilirsiniz.',
+    supportTitle: 'Enigma UX geli\u015ftirmeye destek olun',
+    supportDesc: 'Enigma UX\'u faydal\u0131 buluyorsan\u0131z, geli\u015ftirmeyi desteklemeyi d\u00fc\u015f\u00fcnebilirsiniz.',
     footerTagline: 'Yapay zeka destekli UX denetimi.',
     footerResources: 'Kaynaklar',
     footerLegal: 'Yasal',
@@ -165,7 +165,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: 'Sorunlar',
     footerContributing: 'Katk\u0131da Bulunma',
-    footerCopyright: '\u00a9 2026 synthux. MIT Lisans\u0131 alt\u0131nda a\u00e7\u0131k kaynak.',
+    footerCopyright: '\u00a9 2026 Enigma UX. MIT Lisans\u0131 alt\u0131nda a\u00e7\u0131k kaynak.',
   },
   de: {
     navFeatures: 'Funktionen',
@@ -230,12 +230,12 @@ const translations = {
     privacyReadMore: 'Datenschutzrichtlinie lesen',
     ossTitle: 'Open Source',
     ossSubtitle: 'Offen entwickelt. Beitr\u00e4ge willkommen.',
-    ossDesc: 'synthux ist MIT-lizenziert. Forken, erweitern, anpassen.',
+    ossDesc: 'Enigma UX ist MIT-lizenziert. Forken, erweitern, anpassen.',
     ossCta: 'Auf GitHub markieren',
     ossContribute: 'Beitragsrichtlinien',
     worksWithLabel: 'Kompatibel mit',
-    supportTitle: 'synthux-Entwicklung unterst\u00fctzen',
-    supportDesc: 'Wenn Sie synthux n\u00fctzlich finden, unterst\u00fctzen Sie die Entwicklung.',
+    supportTitle: 'Enigma UX-Entwicklung unterst\u00fctzen',
+    supportDesc: 'Wenn Sie Enigma UX n\u00fctzlich finden, unterst\u00fctzen Sie die Entwicklung.',
     footerTagline: 'KI-gest\u00fctzte UX-Analyse.',
     footerResources: 'Ressourcen',
     footerLegal: 'Rechtliches',
@@ -249,7 +249,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: 'Issues',
     footerContributing: 'Beitragen',
-    footerCopyright: '\u00a9 2026 synthux. Open Source unter MIT-Lizenz.',
+    footerCopyright: '\u00a9 2026 Enigma UX. Open Source unter MIT-Lizenz.',
   },
   zh: {
     navFeatures: '\u529f\u80fd',
@@ -314,12 +314,12 @@ const translations = {
     privacyReadMore: '\u9605\u8bfb\u9690\u79c1\u653f\u7b56',
     ossTitle: '\u5f00\u6e90',
     ossSubtitle: '\u516c\u5f00\u6784\u5efa\u3002\u6b22\u8fce\u8d21\u732e\u3002',
-    ossDesc: 'synthux\u91c7\u7528MIT\u8bb8\u53ef\u3002Fork\u3001\u6269\u5c55\u3001\u5b9a\u5236\u3002',
+    ossDesc: 'Enigma UX\u91c7\u7528MIT\u8bb8\u53ef\u3002Fork\u3001\u6269\u5c55\u3001\u5b9a\u5236\u3002',
     ossCta: '\u5728GitHub\u52a0\u661f',
     ossContribute: '\u8d21\u732e\u6307\u5357',
     worksWithLabel: '\u517c\u5bb9',
-    supportTitle: '\u652f\u6301synthux\u5f00\u53d1',
-    supportDesc: '\u5982\u679c\u60a8\u89c9\u5f97synthux\u6709\u7528\uff0c\u8bf7\u8003\u8651\u652f\u6301\u5176\u5f00\u53d1\u3002',
+    supportTitle: '\u652f\u6301Enigma UX\u5f00\u53d1',
+    supportDesc: '\u5982\u679c\u60a8\u89c9\u5f97Enigma UX\u6709\u7528\uff0c\u8bf7\u8003\u8651\u652f\u6301\u5176\u5f00\u53d1\u3002',
     footerTagline: 'AI\u9a71\u52a8\u7684UX\u5ba1\u8ba1\u3002',
     footerResources: '\u8d44\u6e90',
     footerLegal: '\u6cd5\u5f8b',
@@ -333,7 +333,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: '\u95ee\u9898',
     footerContributing: '\u8d21\u732e',
-    footerCopyright: '\u00a9 2026 synthux\u3002MIT\u8bb8\u53ef\u5f00\u6e90\u3002',
+    footerCopyright: '\u00a9 2026 Enigma UX\u3002MIT\u8bb8\u53ef\u5f00\u6e90\u3002',
   },
   fr: {
     navFeatures: 'Fonctionnalit\u00e9s',
@@ -398,12 +398,12 @@ const translations = {
     privacyReadMore: 'Lire notre Politique de Confidentialit\u00e9',
     ossTitle: 'Open Source',
     ossSubtitle: 'D\u00e9velopp\u00e9 ouvertement. Contributions bienvenues.',
-    ossDesc: 'synthux est sous licence MIT. Forkez, \u00e9tendez, personnalisez.',
+    ossDesc: 'Enigma UX est sous licence MIT. Forkez, \u00e9tendez, personnalisez.',
     ossCta: '\u00c9toiler sur GitHub',
     ossContribute: 'Guide de Contribution',
     worksWithLabel: 'Compatible avec',
-    supportTitle: 'Soutenir le d\u00e9veloppement de synthux',
-    supportDesc: 'Si vous trouvez synthux utile, envisagez de soutenir son d\u00e9veloppement.',
+    supportTitle: 'Soutenir le d\u00e9veloppement de Enigma UX',
+    supportDesc: 'Si vous trouvez Enigma UX utile, envisagez de soutenir son d\u00e9veloppement.',
     footerTagline: 'Audit UX pilot\u00e9 par l\u2019IA.',
     footerResources: 'Ressources',
     footerLegal: 'L\u00e9gal',
@@ -417,7 +417,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: 'Probl\u00e8mes',
     footerContributing: 'Contribuer',
-    footerCopyright: '\u00a9 2026 synthux. Open source sous licence MIT.',
+    footerCopyright: '\u00a9 2026 Enigma UX. Open source sous licence MIT.',
   },
   it: {
     navFeatures: 'Funzionalit\u00e0',
@@ -482,12 +482,12 @@ const translations = {
     privacyReadMore: 'Leggi la nostra Informativa sulla Privacy',
     ossTitle: 'Open Source',
     ossSubtitle: 'Sviluppato apertamente. Contributi benvenuti.',
-    ossDesc: 'synthux \u00e8 sotto licenza MIT. Forkalo, estendilo, personalizzalo.',
+    ossDesc: 'Enigma UX \u00e8 sotto licenza MIT. Forkalo, estendilo, personalizzalo.',
     ossCta: 'Metti una stella su GitHub',
     ossContribute: 'Guida ai Contributi',
     worksWithLabel: 'Compatibile con',
-    supportTitle: 'Supporta lo sviluppo di synthux',
-    supportDesc: 'Se trovi synthux utile, considera di supportare il suo sviluppo.',
+    supportTitle: 'Supporta lo sviluppo di Enigma UX',
+    supportDesc: 'Se trovi Enigma UX utile, considera di supportare il suo sviluppo.',
     footerTagline: 'Audit UX basato su IA.',
     footerResources: 'Risorse',
     footerLegal: 'Legale',
@@ -501,7 +501,7 @@ const translations = {
     footerGithub: 'GitHub',
     footerIssues: 'Problemi',
     footerContributing: 'Contribuire',
-    footerCopyright: '\u00a9 2026 synthux. Open source sotto licenza MIT.',
+    footerCopyright: '\u00a9 2026 Enigma UX. Open source sotto licenza MIT.',
   }
 };
 
@@ -516,7 +516,7 @@ function applyLanguage(lang) {
     if (t[key]) el.textContent = t[key];
   });
   document.documentElement.lang = lang;
-  localStorage.setItem('synthux-lang', lang);
+  localStorage.setItem('enigmaux-lang', lang);
 
   // Sync custom lang pickers
   document.querySelectorAll('.lang-picker').forEach(picker => {
@@ -532,7 +532,7 @@ function applyLanguage(lang) {
 }
 
 function getLanguage() {
-  const saved = localStorage.getItem('synthux-lang');
+  const saved = localStorage.getItem('enigmaux-lang');
   if (saved && translations[saved]) return saved;
 
   // Auto-detect browser language

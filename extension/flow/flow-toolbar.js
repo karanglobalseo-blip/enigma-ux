@@ -1,5 +1,5 @@
 /**
- * synthux — Flow Toolbar
+ * enigmaux — Flow Toolbar
  * 
  * Manages toolbar actions: Add Page, Pin Tab, Add Note, Analyze, Save/Load.
  * Also handles the receipt modal and analysis progress.
@@ -9,7 +9,7 @@ import { FlowCanvas } from './flow-canvas.js';
 
 // ─── Init Canvas ────────────────────────────────────────────────────────────
 const canvas = new FlowCanvas();
-window.__synthux_canvas = canvas; // expose for results panel
+window.__enigmaux_canvas = canvas; // expose for results panel
 
 // ─── Toolbar Buttons ────────────────────────────────────────────────────────
 
@@ -155,8 +155,8 @@ async function performSave() {
   savePopover.hidden = true;
 
   try {
-    const data = await chrome.storage.local.get('synthux_flows');
-    const flows = data.synthux_flows || [];
+    const data = await chrome.storage.local.get('enigmaux_flows');
+    const flows = data.enigmaux_flows || [];
 
     // Check if a flow with the same name already exists
     const existingIdx = flows.findIndex(f => f.name === name);
@@ -174,7 +174,7 @@ async function performSave() {
       flows.unshift(entry); // Add to front
     }
 
-    await chrome.storage.local.set({ synthux_flows: flows });
+    await chrome.storage.local.set({ enigmaux_flows: flows });
     updateSaveStatus('Saved');
     updateLoadBadge();
   } catch (err) {
@@ -196,8 +196,8 @@ document.getElementById('load-modal-close').addEventListener('click', () => { lo
 document.getElementById('load-modal-cancel').addEventListener('click', () => { loadModal.hidden = true; });
 
 async function renderFlowList() {
-  const data = await chrome.storage.local.get('synthux_flows');
-  const flows = data.synthux_flows || [];
+  const data = await chrome.storage.local.get('enigmaux_flows');
+  const flows = data.enigmaux_flows || [];
 
   if (flows.length === 0) {
     loadModalBody.innerHTML = '<div class="flow-list-empty">No saved flows yet.<br>Use <b>Save</b> to create your first one.</div>';
@@ -245,7 +245,7 @@ async function renderFlowList() {
       const flow = flows[idx];
       if (!confirm(`Delete "${flow.name}"?`)) return;
       flows.splice(idx, 1);
-      await chrome.storage.local.set({ synthux_flows: flows });
+      await chrome.storage.local.set({ enigmaux_flows: flows });
       updateLoadBadge();
       await renderFlowList(); // Re-render the list
     });
@@ -497,7 +497,7 @@ if (typeof chrome !== 'undefined' && chrome.runtime?.onMessage) {
       }
 
       // Show results panel
-      window.__synthux_showResults?.(flowReport);
+      window.__enigmaux_showResults?.(flowReport);
 
       // Auto-save is not performed here — user must explicitly Save to name their flow
     }
@@ -553,8 +553,8 @@ async function updateLoadBadge() {
   const loadBtn = document.getElementById('btn-load');
   if (!loadBtn) return;
   try {
-    const data = await chrome.storage.local.get('synthux_flows');
-    const flows = data.synthux_flows || [];
+    const data = await chrome.storage.local.get('enigmaux_flows');
+    const flows = data.enigmaux_flows || [];
     if (flows.length > 0) {
       loadBtn.innerHTML = `Load <span class="badge-pill">+${flows.length}</span>`;
     } else {
@@ -571,9 +571,9 @@ updateLoadBadge();
 // Migrate old single-save format to multi-save
 (async function migrateOldSave() {
   try {
-    const data = await chrome.storage.local.get(['synthux_flow', 'synthux_flows']);
-    if (data.synthux_flow && (!data.synthux_flows || data.synthux_flows.length === 0)) {
-      const oldState = data.synthux_flow;
+    const data = await chrome.storage.local.get(['enigmaux_flow', 'enigmaux_flows']);
+    if (data.enigmaux_flow && (!data.enigmaux_flows || data.enigmaux_flows.length === 0)) {
+      const oldState = data.enigmaux_flow;
       const entry = {
         id: `flow_migrated_${Date.now()}`,
         name: 'Previous Flow',
@@ -581,8 +581,8 @@ updateLoadBadge();
         pageCount: oldState.nodes?.length || 0,
         state: oldState
       };
-      await chrome.storage.local.set({ synthux_flows: [entry] });
-      await chrome.storage.local.remove('synthux_flow');
+      await chrome.storage.local.set({ enigmaux_flows: [entry] });
+      await chrome.storage.local.remove('enigmaux_flow');
       updateLoadBadge();
       console.info('[flow] Migrated old single-save to multi-save format');
     }

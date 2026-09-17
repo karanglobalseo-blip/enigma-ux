@@ -8,13 +8,13 @@
 
 ## Reporting a Vulnerability
 
-We take the security of synthux seriously. If you discover a security vulnerability, please report it responsibly.
+We take the security of Enigma UX seriously. If you discover a security vulnerability, please report it responsibly.
 
 ### How to Report
 
 1. **Do NOT open a public issue.** Security vulnerabilities should be reported privately.
-2. Use [GitHub Security Advisories](https://github.com/synthuxapp/synthux/security/advisories/new) to report the vulnerability.
-3. Alternatively, contact the maintainer directly via the email associated with the [synthuxapp](https://github.com/synthuxapp) organization.
+2. Use [GitHub Security Advisories](https://github.com/karanglobalseo-blip/enigma-ux/security/advisories/new) to report the vulnerability.
+3. Alternatively, contact the maintainer directly via the email associated with the [Enigma UX](https://github.com/Enigma UX) organization.
 
 ### What to Include
 
@@ -56,10 +56,10 @@ We will not take legal action against researchers who follow these guidelines.
 
 ## Security Practices
 
-synthux implements the following security measures:
+Enigma UX implements the following security measures:
 
 - **Content Security Policy:** `script-src 'self'; object-src 'self'` — no inline scripts, no remote code execution
 - **Local-only processing:** All AI analysis runs on the user's machine via Ollama. No data is sent to external servers
 - **Minimal permissions:** Extension requests only the permissions necessary for page analysis
 - **Dependency monitoring:** Automated security scanning via Dependabot, CodeQL, and npm audit
-- **No telemetry:** synthux does not collect usage data, analytics, or telemetry
+- **No telemetry:** Enigma UX does not collect usage data, analytics, or telemetry

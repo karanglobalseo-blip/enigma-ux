@@ -1,5 +1,5 @@
 /**
- * synthux — AI Provider Adapters
+ * enigmaux — AI Provider Adapters
  * 
  * Adapter pattern for multiple AI providers.
  * Each provider normalizes request/response to a common format.
@@ -558,7 +558,7 @@ export async function checkVisionSupport(providerId, model, endpoint) {
     if (Array.isArray(data.capabilities)) {
       const hasVision = data.capabilities.includes('vision');
       _visionCache.set(cacheKey, hasVision);
-      console.info(`[synthux] Vision check for "${model}": capabilities=[${data.capabilities.join(',')}] → ${hasVision}`);
+      console.info(`[enigmaux] Vision check for "${model}": capabilities=[${data.capabilities.join(',')}] → ${hasVision}`);
       return hasVision;
     }
 
@@ -569,7 +569,7 @@ export async function checkVisionSupport(providerId, model, endpoint) {
         k.includes('vision') || k.includes('mmproj') || k.includes('clip')
       );
       _visionCache.set(cacheKey, hasVisionKeys);
-      console.info(`[synthux] Vision check for "${model}": model_info keys fallback → ${hasVisionKeys}`);
+      console.info(`[enigmaux] Vision check for "${model}": model_info keys fallback → ${hasVisionKeys}`);
       return hasVisionKeys;
     }
 
@@ -581,14 +581,14 @@ export async function checkVisionSupport(providerId, model, endpoint) {
         /clip|vision|mmproj/i.test(f)
       );
       _visionCache.set(cacheKey, hasVisionFamily);
-      console.info(`[synthux] Vision check for "${model}": families fallback → ${hasVisionFamily}`);
+      console.info(`[enigmaux] Vision check for "${model}": families fallback → ${hasVisionFamily}`);
       return hasVisionFamily;
     }
 
     _visionCache.set(cacheKey, false);
     return false;
   } catch (err) {
-    console.warn(`[synthux] Vision capability check failed for "${model}":`, err.message);
+    console.warn(`[enigmaux] Vision capability check failed for "${model}":`, err.message);
     _visionCache.set(cacheKey, false);
     return false;
   }

@@ -11,12 +11,12 @@
 
 
 <p align="center">
-  <a href="https://chromewebstore.google.com/detail/synthux/cgldigellmojaejmnhjhpbfccncbmnhm">Chrome Web Store</a> ·
-  <a href="https://synthux.app">Website</a> ·
+  <a href="https://github.com/karanglobalseo-blip/enigma-ux">Chrome Web Store</a> ·
+  <a href="https://github.com/karanglobalseo-blip/enigma-ux">Website</a> ·
   <a href="docs/getting-started.md">Documentation</a> ·
   <a href="docs/CONTRIBUTING.md">Contributing</a> ·
-  <a href="https://github.com/synthuxapp/synthux/releases">Releases</a> ·
-  <a href="https://github.com/synthuxapp/synthux/issues">Issues</a>
+  <a href="https://github.com/karanglobalseo-blip/enigma-ux/releases">Releases</a> ·
+  <a href="https://github.com/karanglobalseo-blip/enigma-ux/issues">Issues</a>
 </p>
 
 ---
@@ -85,7 +85,7 @@ export OLLAMA_ORIGINS="*" && ollama serve
 # Then restart Ollama
 ```
 
-> **Ollama updates may reset this setting.** If you get a CORS error after updating, repeat and restart. synthux will detect this automatically and show a fix wizard.
+> **Ollama updates may reset this setting.** If you get a CORS error after updating, repeat and restart. Enigma UX will detect this automatically and show a fix wizard.
 
 ### Option B — Cloud API (BYOK)
 
@@ -101,29 +101,29 @@ No local setup needed. Just enter your API key in Settings:
 
 **Option 1 — Chrome Web Store** (recommended for Chrome)
 
-[**Install from Chrome Web Store**](https://chromewebstore.google.com/detail/synthux/cgldigellmojaejmnhjhpbfccncbmnhm)
+[**Install from Chrome Web Store**](https://github.com/karanglobalseo-blip/enigma-ux)
 
 **Option 2 — From Source (Chrome or Edge)**
 
-1. Clone: `git clone https://github.com/synthuxapp/synthux.git`
+1. Clone: `git clone https://github.com/karanglobalseo-blip/enigma-ux.git`
 2. Run `npm install && npm run build` for Chrome, or `npm install && npm run build:edge` for Edge
 3. Open `chrome://extensions` in Chrome or `edge://extensions` in Microsoft Edge
 4. Enable **Developer mode**
 5. Click **Load unpacked** and select the repository's `extension/` folder
 
-The Edge build uses the same Chromium-compatible Manifest V3 bundle as Chrome. Edge 116 or later is recommended because synthux uses the browser Side Panel API.
+The Edge build uses the same Chromium-compatible Manifest V3 bundle as Chrome. Edge 116 or later is recommended because Enigma UX uses the browser Side Panel API.
 
 ### Analyze
 
 1. Navigate to any website
-2. Open synthux Side Panel
+2. Open Enigma UX Side Panel
 3. Select mode (Quick / Deep / Custom)
 4. Click **"Analyze Page"**
 5. View results, filter issues, export as PDF or Markdown
 
 ## Vision Analysis
 
-When enabled, synthux captures a full-page screenshot and sends it alongside the DOM data to vision-capable AI models. This enables:
+When enabled, Enigma UX captures a full-page screenshot and sends it alongside the DOM data to vision-capable AI models. This enables:
 
 - **Visual hierarchy analysis** — Are headings and CTAs visually prominent?
 - **Color harmony** — Do colors work well together?
@@ -172,7 +172,7 @@ AI Provider:
 ## Project Structure
 
 ```
-synthuxapp/
+Enigma UX/
 ├── extension/                  # Chrome Extension (load this in Chrome)
 │   ├── manifest.json           # Manifest V3
 │   ├── background/             # Service Worker
@@ -194,13 +194,13 @@ synthuxapp/
 │   └── sidepanel/
 │       ├── app.js              # Root component
 │       └── components/         # Scanner, Report, Settings, Score
-├── website/                    # Landing page (synthux.app)
+├── website/                    # Landing page (Enigma UX)
 └── docs/                       # Documentation
 ```
 
 ## Page Overlay System
 
-After analysis, synthux can interact with the page directly:
+After analysis, Enigma UX can interact with the page directly:
 
 - **Hover-to-Highlight** — Hover an issue in the report → the affected element is highlighted on the page with a severity-colored border and tooltip.
 - **Heatmap Toggle** — Switch on from the report to render a canvas-based severity heatmap over the page.
@@ -250,7 +250,7 @@ We welcome contributions! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidel
 - **BYOK model:** API keys are stored in Chrome's sandboxed local storage, never transmitted to third parties.
 - **Security policy:** Found a vulnerability? See [SECURITY.md](SECURITY.md).
 - **Automated security:** Dependabot, CodeQL, and OpenSSF Scorecard for continuous monitoring.
-- **No telemetry:** synthux does not collect usage data, analytics, or telemetry of any kind.
+- **No telemetry:** Enigma UX does not collect usage data, analytics, or telemetry of any kind.
 
 ## Roadmap
 
@@ -276,7 +276,7 @@ We welcome contributions! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidel
 - [x] Privacy policy update (Flow Analysis, BYOK transparency, developer info)
 
 ### Future
-- [ ] **synthux insights** — Auto-fetched research library from NNGroup and Baymard Institute; AI uses latest UX research findings during analysis for evidence-based recommendations
+- [ ] **Enigma UX insights** — Auto-fetched research library from NNGroup and Baymard Institute; AI uses latest UX research findings during analysis for evidence-based recommendations
 - [ ] Walkthrough mode (guided issue tour on page)
 - [ ] Sectoral rule packs (e-commerce, fintech, SaaS)
 - [ ] Enhanced reporting (richer PDF/Markdown templates)
@@ -284,5 +284,5 @@ We welcome contributions! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidel
 ---
 
 <p align="center">
-  Made by <a href="https://github.com/ufhouck">Ufuk Aydın</a> · <a href="https://github.com/synthuxapp">synthuxapp</a>
+  Made by <a href="https://github.com/ufhouck">Ufuk Aydın</a> · <a href="https://github.com/Enigma UX">Enigma UX</a>
 </p>

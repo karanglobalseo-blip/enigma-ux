@@ -1,5 +1,5 @@
 /**
- * synthux — AI Client (Multi-Provider)
+ * enigmaux — AI Client (Multi-Provider)
  * 
  * Unified AI client that works with multiple providers:
  * - Ollama (local, default)
@@ -73,7 +73,7 @@ export class AIClient {
       try {
         // Wait before retry
         if (attempt > 0) {
-          console.log(`[synthux] Retrying AI call (attempt ${attempt + 1})...`);
+          console.log(`[enigmaux] Retrying AI call (attempt ${attempt + 1})...`);
           await new Promise(r => setTimeout(r, 3000));
         }
 
@@ -97,12 +97,12 @@ export class AIClient {
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error(`[synthux] HTTP ${response.status} from ${req.url}:`, errorText.substring(0, 300));
+          console.error(`[enigmaux] HTTP ${response.status} from ${req.url}:`, errorText.substring(0, 300));
           lastError = new Error(`${this.provider.name} error (${response.status}): ${errorText}`);
 
           // Retry on 500 (server crash), don't retry on 4xx
           if (response.status >= 500 && attempt < maxRetries) {
-            console.warn(`[synthux] ${this.provider.name} 500 error, will retry...`);
+            console.warn(`[enigmaux] ${this.provider.name} 500 error, will retry...`);
             continue;
           }
 

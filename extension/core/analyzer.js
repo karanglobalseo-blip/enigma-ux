@@ -1,5 +1,5 @@
 /**
- * synthux — Main Analyzer Orchestrator
+ * enigmaux — Main Analyzer Orchestrator
  * 
  * Coordinates the full UX evaluation pipeline:
  * 1. Load heuristic rules
@@ -45,7 +45,7 @@ export class Analyzer {
     const visionSupported = await checkVisionSupport(this.providerId, this.model, this.endpoint);
     const safeScreenshot = visionSupported ? screenshot : null;
     if (screenshot && !visionSupported) {
-      console.info(`[synthux] Model "${this.model}" does not support vision — skipping screenshot.`);
+      console.info(`[enigmaux] Model "${this.model}" does not support vision — skipping screenshot.`);
     }
 
     this.cancelled = false;
@@ -86,7 +86,7 @@ export class Analyzer {
 
       const profileId = this.profileIds[pi];
       const profile = await getProfileAsync(profileId);
-      console.info(`[synthux] Profile ${pi + 1}/${totalProfiles}: "${profileId}" → ${profile ? 'loaded' : 'NOT FOUND'}`);
+      console.info(`[enigmaux] Profile ${pi + 1}/${totalProfiles}: "${profileId}" → ${profile ? 'loaded' : 'NOT FOUND'}`);
       if (!profile) continue;
 
       let heuristics;
@@ -99,7 +99,7 @@ export class Analyzer {
         heuristics = selectHeuristics(rules, this.mode, profileId);
       }
       const totalHeuristics = heuristics.length;
-      console.info(`[synthux] → ${totalHeuristics} heuristics selected for mode="${this.mode}"`);
+      console.info(`[enigmaux] → ${totalHeuristics} heuristics selected for mode="${this.mode}"`);
       const evaluations = [];
 
       for (let hi = 0; hi < totalHeuristics; hi++) {
@@ -127,7 +127,7 @@ export class Analyzer {
         const prompt = buildPrompt(heuristic, profile, pageData, !!safeScreenshot);
 
         try {
-          console.info(`[synthux] → Calling AI: ${heuristic.name.en} (model: ${this.model}, provider: ${this.providerId}, vision: ${!!safeScreenshot})`);
+          console.info(`[enigmaux] → Calling AI: ${heuristic.name.en} (model: ${this.model}, provider: ${this.providerId}, vision: ${!!safeScreenshot})`);
           const response = await this.client.evaluate(prompt, {
             model: this.model,
             systemPrompt: profile.systemPrompt,
@@ -144,9 +144,9 @@ export class Analyzer {
               ...evaluation,
               _meta: response.meta || {}
             });
-            console.info(`[synthux] → ✓ Score: ${evaluation.score}, Issues: ${evaluation.issues.length}`);
+            console.info(`[enigmaux] → ✓ Score: ${evaluation.score}, Issues: ${evaluation.issues.length}`);
           } else {
-            console.warn(`[synthux] → ✗ AI returned error: ${response.error}`);
+            console.warn(`[enigmaux] → ✗ AI returned error: ${response.error}`);
 
             // CORS error from Ollama — abort entire analysis immediately,
             // no point running 11 more calls that will all fail the same way
@@ -171,7 +171,7 @@ export class Analyzer {
           // Re-throw CORS errors — they must escape the loop to abort analysis
           if (err.type === 'cors') throw err;
 
-          console.error(`[synthux] → ✗ Evaluation exception for ${heuristic.id}:`, err);
+          console.error(`[enigmaux] → ✗ Evaluation exception for ${heuristic.id}:`, err);
           evaluations.push({
             heuristicId: heuristic.id,
             heuristicName: heuristic.name,
@@ -247,7 +247,7 @@ export class Analyzer {
     const totalInput = costResults.reduce((s, c) => s + c.inputTokens, 0);
     const totalOutput = costResults.reduce((s, c) => s + c.outputTokens, 0);
     const totalThinking = costResults.reduce((s, c) => s + (c.thinkingTokens || 0), 0);
-    console.info(`[synthux] Cost summary: ${costResults.length} API calls, ${totalInput.toLocaleString()} input + ${totalOutput.toLocaleString()} output${totalThinking ? ` (incl. ${totalThinking.toLocaleString()} thinking)` : ''} = ${(totalInput + totalOutput).toLocaleString()} total tokens`);
+    console.info(`[enigmaux] Cost summary: ${costResults.length} API calls, ${totalInput.toLocaleString()} input + ${totalOutput.toLocaleString()} output${totalThinking ? ` (incl. ${totalThinking.toLocaleString()} thinking)` : ''} = ${(totalInput + totalOutput).toLocaleString()} total tokens`);
 
     let costSummary = null;
     try {
@@ -255,7 +255,7 @@ export class Analyzer {
         costResults.map(c => calculateCost(this.model, c.inputTokens, c.outputTokens, this.providerId))
       );
       costSummary = aggregateCosts(costs);
-      console.info(`[synthux] Estimated cost: ${costSummary.formatted}`);
+      console.info(`[enigmaux] Estimated cost: ${costSummary.formatted}`);
     } catch {
       // Cost calculation failed — non-critical
     }

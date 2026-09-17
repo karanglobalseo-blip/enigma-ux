@@ -1,6 +1,6 @@
-# synthux — Feature Roadmap (v1.5 → v3.0)
+# Enigma UX — Feature Roadmap (v1.5 → v3.0)
 
-> Kaynak: `synthux_analysis.md` stratejik öneriler + yol haritası  
+> Kaynak: `enigmaux_analysis.md` stratejik öneriler + yol haritası  
 > Sıralama: **Kolaydan zora**, tahmini effort ile
 
 ---
@@ -14,7 +14,7 @@
 Extension'ı Chrome Web Store'da yayınlamak — kullanıcıların "Load unpacked" yapmadan kurabilmesi.
 
 - Chrome Developer hesabı ($5 tek seferlik)
-- Privacy policy sayfası hazırla (synthux.app/privacy)
+- Privacy policy sayfası hazırla (Enigma UX/privacy)
 - Store listing: açıklama, 5 screenshot, promotional banner
 - Manifest permissions justification yazısı (host_permissions, activeTab, sidePanel)
 - `content_security_policy` gözden geçir
@@ -60,7 +60,7 @@ Markdown yerine profesyonel PDF rapor indirme.
 
 - `jsPDF` veya `html2pdf.js` kütüphanesi ekle (~50KB)
 - Mevcut markdown'ı HTML'e dönüştür → PDF'e render et
-- Synthux logosu + header/footer + skor kartı ile branded template
+- EnigmaUX logosu + header/footer + skor kartı ile branded template
 - "Download design-change.md" yanına "Download PDF" butonu
 
 **Bağımlılık:** Yok — client-side kütüphane

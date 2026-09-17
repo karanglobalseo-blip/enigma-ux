@@ -1,13 +1,13 @@
 /**
- * synthux — Score Component
+ * enigmaux — Score Component
  * 
- * <synthux-score> — Minimal circular score gauge
+ * <enigmaux-score> — Minimal circular score gauge
  * Animated SVG ring with muted color coding
  */
 
 import { LitElement, html, css } from 'lit';
 
-export class SynthuxScore extends LitElement {
+export class EnigmaUXScore extends LitElement {
   static properties = {
     value: { type: Number },
     label: { type: String },
@@ -141,4 +141,4 @@ export class SynthuxScore extends LitElement {
   }
 }
 
-customElements.define('synthux-score', SynthuxScore);
+customElements.define('enigmaux-score', EnigmaUXScore);

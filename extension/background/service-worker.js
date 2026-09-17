@@ -1,5 +1,5 @@
 /**
- * synthux — Background Service Worker
+ * enigmaux — Background Service Worker
  * 
  * Responsibilities:
  * - Opens Side Panel on extension icon click
@@ -21,13 +21,13 @@ chrome.action.onClicked.addListener(async (tab) => {
   try {
     await chrome.sidePanel.open({ tabId: tab.id });
   } catch (err) {
-    console.error('[synthux] Failed to open side panel:', err);
+    console.error('[enigmaux] Failed to open side panel:', err);
   }
 });
 
 // Enable side panel on all tabs
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
-  .catch((err) => console.error('[synthux] Failed to set panel behavior:', err));
+  .catch((err) => console.error('[enigmaux] Failed to set panel behavior:', err));
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
@@ -103,7 +103,7 @@ async function checkOllamaConnection() {
       if (settings.providerId === 'ollama' && pingResult.version) {
         const stored = await chrome.storage.local.get('ollamaVersion');
         if (stored.ollamaVersion && stored.ollamaVersion !== pingResult.version) {
-          console.info(`[synthux] Ollama updated: ${stored.ollamaVersion} → ${pingResult.version}`);
+          console.info(`[enigmaux] Ollama updated: ${stored.ollamaVersion} → ${pingResult.version}`);
           ollamaStatus.versionChanged = true;
           ollamaStatus.oldVersion = stored.ollamaVersion;
           ollamaStatus.newVersion = pingResult.version;
@@ -117,11 +117,11 @@ async function checkOllamaConnection() {
       const modelExists = models.some(m => (m.id || m.name) === savedModel);
       if (!modelExists && models.length > 0) {
         const newModel = models[0].id || models[0].name;
-        console.info(`[synthux] Saved model "${savedModel}" not found for ${settings.providerId}. Using "${newModel}".`);
+        console.info(`[enigmaux] Saved model "${savedModel}" not found for ${settings.providerId}. Using "${newModel}".`);
         await chrome.storage.local.set({ ollamaModel: newModel });
       }
     } else if (isCorsBlocked) {
-      console.warn('[synthux] Ollama is running but CORS is blocking requests. Set OLLAMA_ORIGINS="*" and restart.');
+      console.warn('[enigmaux] Ollama is running but CORS is blocking requests. Set OLLAMA_ORIGINS="*" and restart.');
       ollamaStatus = { connected: false, corsBlocked: true, models: [] };
     } else {
       ollamaStatus = { connected: false, models: [] };
@@ -257,19 +257,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return true;
 
     case 'SAVE_FLOW':
-      chrome.storage.local.set({ synthux_flow: payload }).then(() => {
+      chrome.storage.local.set({ enigmaux_flow: payload }).then(() => {
         sendResponse({ success: true });
       });
       return true;
 
     case 'LOAD_FLOW':
-      chrome.storage.local.get('synthux_flow').then(data => {
-        sendResponse(data.synthux_flow || null);
+      chrome.storage.local.get('enigmaux_flow').then(data => {
+        sendResponse(data.enigmaux_flow || null);
       });
       return true;
 
     default:
-      console.warn('[synthux] Unknown message type:', type);
+      console.warn('[enigmaux] Unknown message type:', type);
   }
 });
 
@@ -365,9 +365,9 @@ async function handleStartAnalysis(options) {
           }
         });
       });
-      console.info(`[synthux] axe-core: ${axeResults?.violations?.length || 0} violations, ${axeResults?.passes || 0} passes`);
+      console.info(`[enigmaux] axe-core: ${axeResults?.violations?.length || 0} violations, ${axeResults?.passes || 0} passes`);
     } catch (axeErr) {
-      console.warn('[synthux] axe-core audit skipped:', axeErr.message);
+      console.warn('[enigmaux] axe-core audit skipped:', axeErr.message);
     }
 
     // Attach axe results to pageData for the analyzer
@@ -412,7 +412,7 @@ async function handleStartAnalysis(options) {
     currentAnalysis = null;
 
     if (err.message === 'Analysis cancelled') {
-      console.info('[synthux] Analysis cancelled by user');
+      console.info('[enigmaux] Analysis cancelled by user');
       broadcastToSidePanel({
         type: 'ANALYSIS_CANCELLED',
         payload: {}
@@ -420,7 +420,7 @@ async function handleStartAnalysis(options) {
       return { cancelled: true };
     }
 
-    console.error('[synthux] Analysis failed:', err);
+    console.error('[enigmaux] Analysis failed:', err);
 
     // Friendly messages for known errors
     let errorMsg = err.message;
@@ -528,7 +528,7 @@ async function addToHistory(report) {
 
     await chrome.storage.local.set({ reportHistory: history });
   } catch (err) {
-    console.error('[synthux] Failed to save to history:', err);
+    console.error('[enigmaux] Failed to save to history:', err);
   }
 }
 
@@ -561,7 +561,7 @@ async function injectOverlayManager(tabId) {
 
     return { success: true };
   } catch (err) {
-    console.error('[synthux] Failed to inject overlay manager:', err);
+    console.error('[enigmaux] Failed to inject overlay manager:', err);
     return { error: err.message };
   }
 }
@@ -598,7 +598,7 @@ async function relayOverlayMessage(type, payload) {
 async function handleFlowAnalysis(payload, sender) {
   // Cancel any previous in-progress analysis instead of blocking
   if (currentFlowManager) {
-    console.warn('[synthux] Cancelling previous flow analysis to start a new one.');
+    console.warn('[enigmaux] Cancelling previous flow analysis to start a new one.');
     currentFlowManager.cancel();
     currentFlowManager = null;
     currentFlowSessionId = null;
@@ -613,8 +613,8 @@ async function handleFlowAnalysis(payload, sender) {
     ollamaModel: 'gemma4:31b',
     providerId: 'ollama',
     apiKey: '',
-    synthux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
-    synthux_selected_mode: 'deep'
+    enigmaux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
+    enigmaux_selected_mode: 'deep'
   });
 
   const flowManager = new FlowManager({
@@ -643,8 +643,8 @@ async function handleFlowAnalysis(payload, sender) {
     connectors: payload.connectors || [],
     notes: payload.notes || [],
     settings,
-    profiles: settings.synthux_selected_profiles,
-    mode: settings.synthux_selected_mode,
+    profiles: settings.enigmaux_selected_profiles,
+    mode: settings.enigmaux_selected_mode,
     sourceTabId: sender.tab?.id || null
   }).then(result => {
     // Only broadcast if this session is still active
@@ -666,7 +666,7 @@ async function handleFlowAnalysis(payload, sender) {
     if (currentFlowSessionId !== sessionId) return;
     currentFlowManager = null;
     currentFlowSessionId = null;
-    console.error('[synthux] Flow analysis error:', err);
+    console.error('[enigmaux] Flow analysis error:', err);
     chrome.runtime.sendMessage({
       type: 'FLOW_ERROR',
       payload: { error: err.message, sessionId }

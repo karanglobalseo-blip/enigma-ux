@@ -1,5 +1,5 @@
 /**
- * synthux — Flow Manager
+ * enigmaux — Flow Manager
  * 
  * Orchestrates sequential multi-page scanning and journey analysis.
  * Rather than analyzing pages individually, it captures pages sequentially and performs a whole-journey assessment.

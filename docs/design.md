@@ -1,10 +1,10 @@
-# synthux — Design System Reference
+# Enigma UX — Design System Reference
 
 > Bu dosya bir AI agent'a veya tasarımcıya tasarım kararları hakkında bağlam vermek için hazırlanmıştır.
 
 ## Brand Identity
 
-- **Name:** synthux (tamamı küçük harf)
+- **Name:** Enigma UX (tamamı küçük harf)
 - **Tagline:** AI-powered UX audit in your browser
 - **Logo:** Text-only typemark — "synth" beyaz + "ux" mavi (#007eff)
 - **License:** MIT
@@ -125,7 +125,7 @@
 
 - Reports export as `design-change.md` (Markdown)
 - Includes: metadata table, overall score, per-profile heuristic scores, issues with severity/recommendation, accessibility audit, priority matrix
-- Footer links back to synthux.app
+- Footer links back to Enigma UX
 
 ## File Structure
 
@@ -141,5 +141,5 @@ extension/         → Chrome extension
   └── sidepanel/   → Side panel UI (Lit components)
 
 src/sidepanel/     → Source components (pre-build)
-  └── components/  → synthux-scanner, synthux-report, synthux-score, synthux-settings
+  └── components/  → Enigma UX-scanner, Enigma UX-report, Enigma UX-score, Enigma UX-settings
 ```

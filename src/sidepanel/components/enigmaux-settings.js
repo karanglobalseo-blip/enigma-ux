@@ -1,7 +1,7 @@
 /**
- * synthux — Settings Component
+ * enigmaux — Settings Component
  * 
- * <synthux-settings> — Minimal settings panel
+ * <enigmaux-settings> — Minimal settings panel
  * Ollama connection, setup guide, language, about
  */
 
@@ -9,7 +9,7 @@ import { LitElement, html, css } from 'lit';
 import { getProvider, getProviderList } from '../../../extension/core/providers.js';
 import { getCustomProfiles, saveCustomProfile, deleteCustomProfile } from '../../../extension/core/profiles.js';
 
-export class SynthuxSettings extends LitElement {
+export class EnigmaUXSettings extends LitElement {
   static properties = {
     ollamaStatus: { type: Object },
     endpoint: { type: String },
@@ -630,7 +630,7 @@ export class SynthuxSettings extends LitElement {
       this._saved = true;
       clearTimeout(this._savedTimer);
       this._savedTimer = setTimeout(() => { this._saved = false; }, 2000);
-    } catch (err) { console.error('[synthux] Auto-save failed:', err); }
+    } catch (err) { console.error('[enigmaux] Auto-save failed:', err); }
   }
 
   async _saveSettings() {
@@ -670,7 +670,7 @@ export class SynthuxSettings extends LitElement {
       // Notify scanner to reload profiles
       this.dispatchEvent(new CustomEvent('profiles-changed', { bubbles: true, composed: true }));
     } catch (err) {
-      console.error('[synthux] Failed to save profile:', err);
+      console.error('[enigmaux] Failed to save profile:', err);
     }
   }
 
@@ -680,7 +680,7 @@ export class SynthuxSettings extends LitElement {
       await this._loadCustomProfiles();
       this.dispatchEvent(new CustomEvent('profiles-changed', { bubbles: true, composed: true }));
     } catch (err) {
-      console.error('[synthux] Failed to delete profile:', err);
+      console.error('[enigmaux] Failed to delete profile:', err);
     }
   }
 
@@ -895,12 +895,12 @@ export class SynthuxSettings extends LitElement {
       <div class="section" style="margin-top: 32px;">
         <div class="section-header">About</div>
         <div class="settings-card about-card">
-          <div class="about-name">synthux</div>
+          <div class="about-name">Enigma UX</div>
           <div class="about-version">v${chrome.runtime?.getManifest?.()?.version || '1.9.0'}</div>
           <div class="about-desc">AI-powered UX audit. Open source. Privacy first.</div>
           <div class="about-links">
-            <a class="about-link" href="https://synthux.app" target="_blank">Website</a>
-            <a class="about-link" href="https://github.com/synthuxapp/synthux" target="_blank">GitHub</a>
+            <a class="about-link" href="https://github.com/karanglobalseo-blip/enigma-ux" target="_blank">Website</a>
+            <a class="about-link" href="https://github.com/karanglobalseo-blip/enigma-ux" target="_blank">GitHub</a>
           </div>
           <div class="about-license">MIT License</div>
         </div>
@@ -909,4 +909,4 @@ export class SynthuxSettings extends LitElement {
   }
 }
 
-customElements.define('synthux-settings', SynthuxSettings);
+customElements.define('enigmaux-settings', EnigmaUXSettings);

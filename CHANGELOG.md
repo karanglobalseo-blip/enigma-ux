@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Screenshot Resize:** Flow screenshots are downscaled to 800×600 before sending to AI, dramatically reducing payload size and preventing Ollama timeouts.
 - **Dynamic Token Limits:** Flow analysis uses `maxTokens: 8192` (Ollama) / `4096` (cloud) for the large JSON responses it requires.
 - **Cancel & Restart:** Starting a new flow analysis automatically cancels any in-progress analysis instead of blocking.
-- **Context Menu Integration:** Right-click on any page → "Analyze in synthux Flow" opens the Flow Builder with that page pre-added.
+- **Context Menu Integration:** Right-click on any page → "Analyze in Enigma UX Flow" opens the Flow Builder with that page pre-added.
 - **Auto-Connect:** New pages are automatically connected to the last added page with a connector arrow.
 - **Heatmap Improvements:** Gradient rendering, legend overlay, and pulse animations for issue markers on the heatmap.
 - **Chrome Web Store Rating Prompt:** In-app prompt encouraging users to rate the extension after successful analysis.
@@ -171,7 +171,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Landing page:** Static site at `website/` with dark glassmorphism theme (Saira + Inter fonts)
-- **Firebase Hosting:** Production deployment to `synthux-app.web.app` with custom domain `synthux.app`
+- **Firebase Hosting:** Production deployment to `Enigma UX-app.web.app` with custom domain `Enigma UX`
 - **Internationalization:** EN/TR language toggle with `localStorage` persistence (`i18n.js`)
 - **SEO:** Google Analytics (GA4), `robots.txt`, `sitemap.xml`, JSON-LD structured data, Open Graph tags
 - **LLM discoverability:** `llms.txt` for AI crawler context
@@ -181,7 +181,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Feature descriptions updated to mention **LM Studio** and **Qwen** alongside Ollama/Gemma
 - How It Works step 1 broadened: "Install Ollama or LM Studio"
-- How It Works steps now include direct links to [Ollama](https://ollama.com), [LM Studio](https://lmstudio.ai), [Gemma 4](https://ollama.com/library/gemma4), [Qwen 3.6](https://ollama.com/library/qwen3.6), [Llama 4](https://ollama.com/library/llama4), and [GitHub repo](https://github.com/synthuxapp/synthux)
+- How It Works steps now include direct links to [Ollama](https://ollama.com), [LM Studio](https://lmstudio.ai), [Gemma 4](https://ollama.com/library/gemma4), [Qwen 3.6](https://ollama.com/library/qwen3.6), [Llama 4](https://ollama.com/library/llama4), and [GitHub repo](https://github.com/karanglobalseo-blip/enigma-ux)
 - `firebase.json` configured with security headers (X-Content-Type-Options, X-Frame-Options, CSP)
 - `.gitignore` updated with Firebase cache exclusions
 
@@ -239,7 +239,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Empty Output Filtering:** `isPlaceholder()` removes "No description" / blank entries
 - **Color palette:** Neon cyan/purple → single indigo accent (#6366f1) + neutral grays
 - **Emoji removal:** All emojis replaced with CSS dots and plain text
-- **Logo simplification:** Gradient S icon → text-only "synthux" typemark
+- **Logo simplification:** Gradient S icon → text-only "Enigma UX" typemark
 - **Button/card styling:** Gradients → flat solid, glow effects removed
 
 ---

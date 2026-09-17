@@ -1,7 +1,7 @@
 # Chrome Web Store — Listing Materials
 
 ## Extension Name
-synthux — AI UX Audit
+Enigma UX — AI UX Audit
 
 ## Short Description (132 char max)
 AI-powered UX audit in your browser. Evaluate any page with synthetic user profiles and Nielsen's 10 heuristics. 100% local & private.
@@ -10,7 +10,7 @@ AI-powered UX audit in your browser. Evaluate any page with synthetic user profi
 
 Analyze any website's UX quality using AI — right from your browser.
 
-synthux evaluates web pages using Nielsen's 10 Usability Heuristics and synthetic user profiles, powered by local AI (Ollama). All processing happens on your machine. No data leaves your browser. No signup. No API costs.
+Enigma UX evaluates web pages using Nielsen's 10 Usability Heuristics and synthetic user profiles, powered by local AI (Ollama). All processing happens on your machine. No data leaves your browser. No signup. No API costs.
 
 ⸻ FEATURES ⸻
 
@@ -43,7 +43,7 @@ Your data never leaves your machine. Open source under MIT License.
 1. Install Ollama (ollama.com) and pull a model
 2. Enable Chrome extension access (see Setup Guide in Settings)
 3. Navigate to any website
-4. Open synthux Side Panel
+4. Open Enigma UX Side Panel
 5. Click "Analyze Page"
 6. View results and export as Markdown
 
@@ -55,7 +55,7 @@ Your data never leaves your machine. Open source under MIT License.
 
 ⸻ OPEN SOURCE ⸻
 
-synthux is free and open source: https://github.com/synthuxapp/synthux
+Enigma UX is free and open source: https://github.com/karanglobalseo-blip/enigma-ux
 
 Found a bug? Have a feature request? Open an issue on GitHub.
 
@@ -68,10 +68,10 @@ Developer Tools
 English (United States)
 
 ## Privacy Policy URL
-https://synthux.app/privacy.html
+https://github.com/karanglobalseo-blip/enigma-ux/privacy.html
 
 ## Single Purpose Description (for review)
-synthux analyzes the UX quality of web pages using local AI (Ollama) and Nielsen's 10 Usability Heuristics, providing actionable scores and recommendations.
+Enigma UX analyzes the UX quality of web pages using local AI (Ollama) and Nielsen's 10 Usability Heuristics, providing actionable scores and recommendations.
 
 ## Host Permission Justification
 
@@ -104,7 +104,7 @@ No
 
 ## Screenshot Descriptions (for alt text)
 
-1. **Scanner view** — synthux Side Panel showing the scan interface with profile selection and analysis mode toggle
+1. **Scanner view** — Enigma UX Side Panel showing the scan interface with profile selection and analysis mode toggle
 2. **Analysis in progress** — Real-time terminal log showing heuristic evaluation progress
 3. **Report results** — Detailed UX report with overall score, heuristic breakdown, and severity badges
 4. **Settings panel** — Ollama connection settings and setup guide

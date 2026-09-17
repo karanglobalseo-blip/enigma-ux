@@ -1,5 +1,5 @@
 /**
- * synthux — Accessibility Checks (Rule-Based, No AI)
+ * enigmaux — Accessibility Checks (Rule-Based, No AI)
  * 
  * Deterministic accessibility checks that run on extracted DOM data.
  * These produce reliable, consistent results without AI.

@@ -1,5 +1,5 @@
 /**
- * synthux — Content Script
+ * enigmaux — Content Script
  * 
  * Injected into the active page to extract DOM data for UX analysis.
  * Runs in the page context and communicates with the Service Worker via messages.
@@ -14,10 +14,10 @@
  */
 
 // Prevent multiple injections
-if (window.__synthux_injected__) {
+if (window.__enigmaux_injected__) {
   // Already injected — just listen for new messages
 } else {
-  window.__synthux_injected__ = true;
+  window.__enigmaux_injected__ = true;
 
   // ─── Message Listener ──────────────────────────────────────────────────────
 
@@ -591,7 +591,7 @@ async function runAxeAudit(options = {}) {
       });
     } catch (injectErr) {
       // CSP may block script injection — try alternative approach
-      console.warn('[synthux] Direct axe injection failed, trying fetch fallback:', injectErr.message);
+      console.warn('[enigmaux] Direct axe injection failed, trying fetch fallback:', injectErr.message);
       try {
         const response = await fetch(chrome.runtime.getURL('content/axe.min.js'));
         const code = await response.text();

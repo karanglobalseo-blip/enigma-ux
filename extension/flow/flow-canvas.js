@@ -1,5 +1,5 @@
 /**
- * synthux — Flow Canvas Engine
+ * enigmaux — Flow Canvas Engine
  * 
  * Manages nodes, connectors, sticky notes on an infinite pan/zoom canvas.
  * Pure vanilla JS — no framework dependency.

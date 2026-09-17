@@ -1,12 +1,12 @@
 /**
- * synthux — Cost Calculator
+ * enigmaux — Cost Calculator
  * 
  * Estimates the cost of an AI analysis using pricing data from aicost.
  * Hybrid approach: bundled pricing.json (offline fallback) + periodic GitHub fetch.
  */
 
 const PRICING_URL = 'https://raw.githubusercontent.com/ufhouck/aicost/main/data/pricing.json';
-const CACHE_KEY = 'synthux_pricing_cache';
+const CACHE_KEY = 'enigmaux_pricing_cache';
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
 // ─── Bundled pricing data (offline fallback) ─────────────────────────────────

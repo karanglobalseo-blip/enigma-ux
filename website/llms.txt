@@ -1,10 +1,10 @@
-# synthux
+# Enigma UX
 
 > AI-powered UX audit in your browser. Open source.
 
-## What is synthux?
+## What is Enigma UX?
 
-synthux is an open-source Chrome extension that evaluates web pages using synthetic user profiles and Nielsen's 10 Usability Heuristics — powered by local AI (Ollama or LM Studio).
+Enigma UX is an open-source Chrome extension that evaluates web pages using synthetic user profiles and Nielsen's 10 Usability Heuristics — powered by local AI (Ollama or LM Studio).
 
 All analysis runs locally on the user's machine. No data is sent to external servers.
 
@@ -29,14 +29,14 @@ All analysis runs locally on the user's machine. No data is sent to external ser
 
 ## Links
 
-- Website: https://synthux.app
-- GitHub: https://github.com/synthuxapp/synthux
-- Documentation: https://github.com/synthuxapp/synthux/blob/main/docs/getting-started.md
-- Privacy Policy: https://github.com/synthuxapp/synthux/blob/main/PRIVACY.md
-- Security Policy: https://github.com/synthuxapp/synthux/blob/main/SECURITY.md
-- Changelog: https://github.com/synthuxapp/synthux/blob/main/CHANGELOG.md
+- Website: https://github.com/karanglobalseo-blip/enigma-ux
+- GitHub: https://github.com/karanglobalseo-blip/enigma-ux
+- Documentation: https://github.com/karanglobalseo-blip/enigma-ux/blob/main/docs/getting-started.md
+- Privacy Policy: https://github.com/karanglobalseo-blip/enigma-ux/blob/main/PRIVACY.md
+- Security Policy: https://github.com/karanglobalseo-blip/enigma-ux/blob/main/SECURITY.md
+- Changelog: https://github.com/karanglobalseo-blip/enigma-ux/blob/main/CHANGELOG.md
 
 ## Contact
 
-- Issues: https://github.com/synthuxapp/synthux/issues
-- Contributing: https://github.com/synthuxapp/synthux/blob/main/docs/CONTRIBUTING.md
+- Issues: https://github.com/karanglobalseo-blip/enigma-ux/issues
+- Contributing: https://github.com/karanglobalseo-blip/enigma-ux/blob/main/docs/CONTRIBUTING.md

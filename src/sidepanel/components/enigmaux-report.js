@@ -1,14 +1,14 @@
 /**
- * synthux — Report Component
+ * enigmaux — Report Component
  * 
- * <synthux-report> — Minimal report viewer
+ * <enigmaux-report> — Minimal report viewer
  * Score gauge, profile tabs, expandable heuristic cards, accessibility audit
  */
 
 import { LitElement, html, css } from 'lit';
-import './synthux-score.js';
+import './enigmaux-score.js';
 
-export class SynthuxReport extends LitElement {
+export class EnigmaUXReport extends LitElement {
   static properties = {
     report: { type: Object },
     history: { type: Array },
@@ -785,7 +785,7 @@ export class SynthuxReport extends LitElement {
       const { generatePDF } = await import('../../../extension/core/pdf-export.js');
       const blob = generatePDF(this.report);
       const hostname = this._shortenUrl(this.report.url).replace(/[\/:.]/g, '-').replace(/-+/g, '-');
-      const filename = `synthux-report-${hostname}.pdf`;
+      const filename = `enigmaux-report-${hostname}.pdf`;
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -793,7 +793,7 @@ export class SynthuxReport extends LitElement {
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('[synthux] PDF generation failed:', err);
+      console.error('[enigmaux] PDF generation failed:', err);
     }
   }
 
@@ -817,7 +817,7 @@ export class SynthuxReport extends LitElement {
 
     return html`
       <div class="overall-section">
-        <synthux-score value="${r.overallScore || 0}" label="Overall UX Score" size="lg"></synthux-score>
+        <enigmaux-score value="${r.overallScore || 0}" label="Overall UX Score" size="lg"></enigmaux-score>
         <div class="report-meta">
           ${this._shortenUrl(r.url)}${r.model ? html`<br>${r.model} · ` : ''}${r.mode === 'deep' ? 'Deep' : 'Quick'}
           ${r.timestamp ? html` · ${new Date(r.timestamp).toLocaleString()}` : ''}
@@ -1087,4 +1087,4 @@ export class SynthuxReport extends LitElement {
   }
 }
 
-customElements.define('synthux-report', SynthuxReport);
+customElements.define('enigmaux-report', EnigmaUXReport);

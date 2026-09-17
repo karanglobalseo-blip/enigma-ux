@@ -1,16 +1,16 @@
 /**
- * synthux — Root Application Component
+ * enigmaux — Root Application Component
  * 
- * <synthux-app> — Main container with tab navigation
+ * <enigmaux-app> — Main container with tab navigation
  * Tabs: Scan | Report | Settings
  */
 
 import { LitElement, html, css } from 'lit';
-import './components/synthux-scanner.js';
-import './components/synthux-report.js';
-import './components/synthux-settings.js';
+import './components/enigmaux-scanner.js';
+import './components/enigmaux-report.js';
+import './components/enigmaux-settings.js';
 
-export class SynthuxApp extends LitElement {
+export class EnigmaUXApp extends LitElement {
   static properties = {
     activeTab: { type: String },
     ollamaStatus: { type: Object },
@@ -354,7 +354,7 @@ export class SynthuxApp extends LitElement {
         this.activeTab = 'report';
       }
     } catch (err) {
-      console.error('[synthux] Failed to load report:', err);
+      console.error('[enigmaux] Failed to load report:', err);
     }
   }
 
@@ -366,7 +366,7 @@ export class SynthuxApp extends LitElement {
         this.reportHistory = result.history;
       }
     } catch (err) {
-      console.error('[synthux] Failed to delete report:', err);
+      console.error('[enigmaux] Failed to delete report:', err);
     }
   }
 
@@ -399,7 +399,7 @@ export class SynthuxApp extends LitElement {
       <!-- Header -->
       <div class="header">
         <div class="logo">
-          <img class="logo-img" src="../assets/logo.svg" alt="synthux" />
+          <img class="logo-img" src="../assets/logo.svg" alt="Enigma UX" />
         </div>
         <div class="status-badge ${status.cls}">
           <span class="status-dot ${status.cls}"></span>
@@ -438,47 +438,47 @@ export class SynthuxApp extends LitElement {
       <!-- Content -->
       <div class="content">
         <div class="tab-panel ${this.activeTab === 'scan' ? 'active' : ''}" role="tabpanel">
-          <synthux-scanner
+          <enigmaux-scanner
             .ollamaStatus="${this.ollamaStatus}"
             .isAnalyzing="${this.isAnalyzing}"
             .progress="${this.analysisProgress}"
             @analysis-start="${this._handleAnalysisStart}"
             @analysis-end="${this._handleAnalysisEnd}"
-          ></synthux-scanner>
+          ></enigmaux-scanner>
         </div>
 
         <div class="tab-panel ${this.activeTab === 'report' ? 'active' : ''}" role="tabpanel">
-          <synthux-report
+          <enigmaux-report
             .report="${this.report}"
-          ></synthux-report>
+          ></enigmaux-report>
         </div>
 
         <div class="tab-panel ${this.activeTab === 'history' ? 'active' : ''}" role="tabpanel">
-          <synthux-report
+          <enigmaux-report
             .report="${null}"
             .history="${this.reportHistory}"
             showHistory
             @load-report="${this._loadHistoryReport}"
             @delete-report="${this._deleteHistoryReport}"
-          ></synthux-report>
+          ></enigmaux-report>
         </div>
 
         <div class="tab-panel ${this.activeTab === 'settings' ? 'active' : ''}" role="tabpanel">
-          <synthux-settings
+          <enigmaux-settings
             .ollamaStatus="${this.ollamaStatus}"
             @status-changed="${(e) => this.ollamaStatus = e.detail}"
-          ></synthux-settings>
+          ></enigmaux-settings>
         </div>
       </div>
     `;
   }
   async _maybeShowRatingPrompt() {
     try {
-      const data = await chrome.storage.local.get(['synthux_rating_dismissed', 'synthux_analysis_count']);
-      if (data.synthux_rating_dismissed) return;
+      const data = await chrome.storage.local.get(['enigmaux_rating_dismissed', 'enigmaux_analysis_count']);
+      if (data.enigmaux_rating_dismissed) return;
 
-      const count = (data.synthux_analysis_count || 0) + 1;
-      await chrome.storage.local.set({ synthux_analysis_count: count });
+      const count = (data.enigmaux_analysis_count || 0) + 1;
+      await chrome.storage.local.set({ enigmaux_analysis_count: count });
 
       if (count < 1) return; // Show after 1st analysis
 
@@ -497,11 +497,11 @@ export class SynthuxApp extends LitElement {
       <div class="rating-toast">
         <div class="rating-toast__header">
           <span class="rating-toast__icon">★</span>
-          <span class="rating-toast__title">Enjoying synthux?</span>
+          <span class="rating-toast__title">Enjoying Enigma UX?</span>
         </div>
-        <p class="rating-toast__desc">A quick rating on the Chrome Web Store helps others discover synthux.</p>
+        <p class="rating-toast__desc">A quick rating on the Chrome Web Store helps others discover Enigma UX.</p>
         <div class="rating-toast__actions">
-          <button class="rating-toast__btn rating-toast__btn--primary" id="rating-rate">Rate synthux</button>
+          <button class="rating-toast__btn rating-toast__btn--primary" id="rating-rate">Rate Enigma UX</button>
           <button class="rating-toast__btn rating-toast__btn--secondary" id="rating-dismiss">Maybe later</button>
         </div>
       </div>
@@ -510,17 +510,17 @@ export class SynthuxApp extends LitElement {
     this.shadowRoot.appendChild(toast);
 
     toast.querySelector('#rating-rate').addEventListener('click', () => {
-      window.open('https://chromewebstore.google.com/detail/synthux/cgldigellmojaejmnhjhpbfccncbmnhm/reviews', '_blank');
-      chrome.storage.local.set({ synthux_rating_dismissed: true });
+      window.open('https://github.com/karanglobalseo-blip/enigma-ux/reviews', '_blank');
+      chrome.storage.local.set({ enigmaux_rating_dismissed: true });
       toast.remove();
     });
 
     toast.querySelector('#rating-dismiss').addEventListener('click', () => {
-      chrome.storage.local.set({ synthux_rating_dismissed: true });
+      chrome.storage.local.set({ enigmaux_rating_dismissed: true });
       toast.classList.add('rating-toast-exit');
       setTimeout(() => toast.remove(), 300);
     });
   }
 }
 
-customElements.define('synthux-app', SynthuxApp);
+customElements.define('enigmaux-app', EnigmaUXApp);

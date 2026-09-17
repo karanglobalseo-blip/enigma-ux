@@ -4,15 +4,15 @@
 
 ## Overview
 
-synthux is an open-source Chrome extension that performs UX/UI analysis using local or cloud AI. We are committed to protecting your privacy. This policy explains what data synthux accesses, how it is processed, and what is stored.
+Enigma UX is an open-source Chrome extension that performs UX/UI analysis using local or cloud AI. We are committed to protecting your privacy. This policy explains what data Enigma UX accesses, how it is processed, and what is stored.
 
-**The short version:** synthux does not collect, transmit, or share any personal data with us. When using local AI (Ollama), all processing stays on your machine. When using cloud AI (BYOK mode), data is sent directly to your chosen provider using your own API key — we never see it.
+**The short version:** Enigma UX does not collect, transmit, or share any personal data with us. When using local AI (Ollama), all processing stays on your machine. When using cloud AI (BYOK mode), data is sent directly to your chosen provider using your own API key — we never see it.
 
 ## Data Collection
 
-### What synthux accesses
+### What Enigma UX accesses
 
-When you initiate an analysis, synthux temporarily reads the following data from the active browser tab:
+When you initiate an analysis, Enigma UX temporarily reads the following data from the active browser tab:
 
 - **DOM structure:** HTML headings, forms, links, buttons, navigation elements, and landmarks
 - **Accessibility attributes:** ARIA roles, alt text, tab order, and focus indicators
@@ -21,7 +21,7 @@ When you initiate an analysis, synthux temporarily reads the following data from
 - **Performance indicators:** DOM size, image count, script count
 - **Flow Builder data:** When using Flow Builder, screenshots of each page in the flow are captured and temporarily held in memory for cross-page analysis
 
-### What synthux does NOT access
+### What Enigma UX does NOT access
 
 - Passwords, form inputs, or autofill data
 - Cookies or session tokens
@@ -32,7 +32,7 @@ When you initiate an analysis, synthux temporarily reads the following data from
 
 ## Data Processing
 
-synthux supports two processing modes:
+Enigma UX supports two processing modes:
 
 ### Local AI (Ollama — default)
 
@@ -59,14 +59,14 @@ Important:
 - **Analysis reports** are saved in `chrome.storage.local` (browser-local storage)
 - Reports remain on your device and are never synced or uploaded
 - **Settings** (Ollama endpoint, model selection, API keys, language preference) are stored in `chrome.storage.local`
-- **Flow Builder data** (page screenshots, connections, sticky notes, analysis results) is stored in `chrome.storage.local` under the key `synthux_flows`
+- **Flow Builder data** (page screenshots, connections, sticky notes, analysis results) is stored in `chrome.storage.local` under the key `Enigma UX_flows`
 - You can delete all stored data by removing the extension or clearing extension data in Chrome settings
 - Maximum 20 reports are retained; older reports are automatically removed
 - Flow data is stored independently and can be managed (saved, loaded, deleted) within the Flow Builder UI
 
 ## Data Sharing
 
-synthux does **not** share any data with:
+Enigma UX does **not** share any data with:
 
 - The extension developers
 - Third-party analytics services
@@ -75,7 +75,7 @@ synthux does **not** share any data with:
 
 ## Permissions Explained
 
-synthux requires the following Chrome permissions:
+Enigma UX requires the following Chrome permissions:
 
 | Permission | Purpose | Data Impact |
 | :--------- | :------ | :---------- |
@@ -95,7 +95,7 @@ synthux requires the following Chrome permissions:
 | `https://api.anthropic.com/*` | Anthropic Claude API (BYOK mode only) |
 | `<all_urls>` | Enable analysis on any website the user visits |
 
-> **Why `<all_urls>`?** synthux needs to inject a content script to read page structure on any website the user chooses to analyze. This permission is only exercised when the user actively initiates an analysis. The extension does not run background scripts on pages or monitor browsing activity.
+> **Why `<all_urls>`?** Enigma UX needs to inject a content script to read page structure on any website the user chooses to analyze. This permission is only exercised when the user actively initiates an analysis. The extension does not run background scripts on pages or monitor browsing activity.
 
 ## Flow Builder
 
@@ -109,22 +109,22 @@ The Flow Builder feature allows you to map multi-page user journeys for cross-pa
 
 ## Developer Information
 
-synthux is developed and maintained by:
+Enigma UX is developed and maintained by:
 
 - **Developer:** Ufuk Aydın
 - **GitHub:** [github.com/ufhouck](https://github.com/ufhouck)
-- **Organization:** [github.com/synthuxapp](https://github.com/synthuxapp)
-- **Contact:** [Open an issue](https://github.com/synthuxapp/synthux/issues)
+- **Organization:** [github.com/Enigma UX](https://github.com/Enigma UX)
+- **Contact:** [Open an issue](https://github.com/karanglobalseo-blip/enigma-ux/issues)
 
 ## Children's Privacy
 
-synthux is a developer/designer tool and is not directed at children under 13. We do not knowingly collect data from children.
+Enigma UX is a developer/designer tool and is not directed at children under 13. We do not knowingly collect data from children.
 
 ## Open Source Transparency
 
-synthux is fully open source under the [MIT License](LICENSE). You can:
+Enigma UX is fully open source under the [MIT License](LICENSE). You can:
 
-- **Inspect the source code** at [github.com/synthuxapp/synthux](https://github.com/synthuxapp/synthux)
+- **Inspect the source code** at [github.com/Enigma UX/Enigma UX](https://github.com/karanglobalseo-blip/enigma-ux)
 - **Verify these claims** by reviewing the codebase
 - **Build from source** to ensure the extension matches the published code
 
@@ -134,4 +134,4 @@ We may update this privacy policy from time to time. Changes will be documented 
 
 ## Contact
 
-If you have questions about this privacy policy, please [open an issue](https://github.com/synthuxapp/synthux/issues) on our GitHub repository.
+If you have questions about this privacy policy, please [open an issue](https://github.com/karanglobalseo-blip/enigma-ux/issues) on our GitHub repository.

@@ -1,5 +1,5 @@
 /**
- * synthux — Screenshot Capture
+ * enigmaux — Screenshot Capture
  * 
  * Captures full-page screenshot via Chrome API by scrolling through
  * the page in viewport-sized chunks and stitching them.
@@ -108,11 +108,11 @@ export async function captureScreenshot(tabId) {
       const stitched = await stitchCaptures(captures, viewportWidth, viewportHeight, scrollHeight);
       return stitched;
     } catch (err) {
-      console.warn('[synthux] Stitch failed, using first capture:', err);
+      console.warn('[enigmaux] Stitch failed, using first capture:', err);
       return captures[0];
     }
   } catch (err) {
-    console.error('[synthux] Screenshot capture failed:', err);
+    console.error('[enigmaux] Screenshot capture failed:', err);
     return null;
   }
 }
@@ -292,7 +292,7 @@ export async function captureAnnotatedScreenshot(tabId, issues) {
       reader.readAsDataURL(annotatedBlob);
     });
   } catch (err) {
-    console.error('[synthux] Annotated screenshot failed:', err);
+    console.error('[enigmaux] Annotated screenshot failed:', err);
     return null;
   }
 }

@@ -1,5 +1,5 @@
 /**
- * synthux — Nielsen 10 Heuristic Engine
+ * enigmaux — Nielsen 10 Heuristic Engine
  * 
  * Loads heuristic rules from JSON and builds AI evaluation prompts.
  * Parses AI responses and calculates weighted scores.
@@ -16,7 +16,7 @@ export async function loadHeuristics(rulePath = '../rules/nielsen-10.json') {
     const data = await response.json();
     return data;
   } catch (err) {
-    console.error('[synthux] Failed to load heuristics:', err);
+    console.error('[enigmaux] Failed to load heuristics:', err);
     return getDefaultHeuristics();
   }
 }
@@ -175,7 +175,7 @@ export function parseEvaluation(response) {
       scoreJustification: String(data.score_justification || '').trim()
     };
   } catch (err) {
-    console.error('[synthux] Failed to parse evaluation:', err);
+    console.error('[enigmaux] Failed to parse evaluation:', err);
     return {
       score: 50,
       summary: 'Unable to parse AI evaluation response',

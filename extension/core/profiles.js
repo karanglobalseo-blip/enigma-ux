@@ -1,5 +1,5 @@
 /**
- * synthux — Synthetic User Profiles
+ * enigmaux — Synthetic User Profiles
  * 
  * Defines personas for AI-driven UX evaluation.
  * Each profile has a unique perspective that influences how heuristics are evaluated.

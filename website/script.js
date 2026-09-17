@@ -1,4 +1,4 @@
-/* synthux Landing Page — Interactions */
+/* Enigma UX Landing Page — Interactions */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Apply saved language
@@ -43,17 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch latest version from GitHub manifest.json
   const versionBadge = document.getElementById('version-badge');
   if (versionBadge) {
-    fetch('https://raw.githubusercontent.com/synthuxapp/synthux/main/extension/manifest.json')
+    fetch('https://raw.githubusercontent.com/karanglobalseo-blip/enigma-ux/main/extension/manifest.json')
       .then(r => r.json())
       .then(manifest => {
-        versionBadge.innerHTML = `v${manifest.version} · <a href="https://github.com/synthuxapp/synthux" target="_blank">Open Source</a>`;
+        versionBadge.innerHTML = `v${manifest.version} · <a href="https://github.com/karanglobalseo-blip/enigma-ux" target="_blank">Open Source</a>`;
       })
       .catch(() => {});
   }
 });
 
 /* ─── Theme System ─── */
-const THEME_KEY = 'synthux_theme';
+const THEME_KEY = 'enigmaux_theme';
 const THEMES = ['system', 'light', 'dark'];
 const THEME_ICONS = { system: '◑', light: '☀️', dark: '🌙' };
 

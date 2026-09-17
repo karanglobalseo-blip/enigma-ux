@@ -1,5 +1,5 @@
 /**
- * synthux — Overlay Manager
+ * enigmaux — Overlay Manager
  * 
  * Unified overlay system for highlighting, heatmaps, and annotations.
  * Injected into the target page via chrome.scripting.executeScript.
@@ -16,13 +16,13 @@
 
 (function () {
   // Prevent multiple injections
-  if (window.__synthux_overlay__) return;
-  window.__synthux_overlay__ = true;
+  if (window.__enigmaux_overlay__) return;
+  window.__enigmaux_overlay__ = true;
 
-  const OVERLAY_ID = '__synthux-overlay-root__';
-  const HIGHLIGHT_ID = '__synthux-highlight__';
-  const TOOLTIP_ID = '__synthux-tooltip__';
-  const HEATMAP_ID = '__synthux-heatmap__';
+  const OVERLAY_ID = '__enigmaux-overlay-root__';
+  const HIGHLIGHT_ID = '__enigmaux-highlight__';
+  const TOOLTIP_ID = '__enigmaux-tooltip__';
+  const HEATMAP_ID = '__enigmaux-heatmap__';
 
   // ─── Overlay Root ──────────────────────────────────────────────────────────
 
@@ -154,9 +154,9 @@
 
   // ─── Heatmap ───────────────────────────────────────────────────────────────
 
-  const LEGEND_ID = '__synthux-heatmap-legend__';
-  const OUTLINES_ID = '__synthux-heatmap-outlines__';
-  const PULSE_STYLE_ID = '__synthux-pulse-style__';
+  const LEGEND_ID = '__enigmaux-heatmap-legend__';
+  const OUTLINES_ID = '__enigmaux-heatmap-outlines__';
+  const PULSE_STYLE_ID = '__enigmaux-pulse-style__';
 
   function showHeatmap(issues) {
     clearHeatmap();
@@ -202,12 +202,12 @@
       const style = document.createElement('style');
       style.id = PULSE_STYLE_ID;
       style.textContent = `
-        @keyframes __synthux-pulse {
+        @keyframes __enigmaux-pulse {
           0%, 100% { opacity: 0.8; }
           50% { opacity: 0.4; }
         }
-        .__synthux-outline--critical {
-          animation: __synthux-pulse 2s ease-in-out infinite;
+        .__enigmaux-outline--critical {
+          animation: __enigmaux-pulse 2s ease-in-out infinite;
         }
       `;
       document.head.appendChild(style);
@@ -281,7 +281,7 @@
     points.forEach((point, index) => {
       const color = sevColors[point.severity] || sevColors.minor;
       const outline = document.createElement('div');
-      outline.dataset.synthuxIndex = index;
+      outline.dataset.enigmauxIndex = index;
       outline.style.cssText = `
         position:absolute; left:${point.rectX - 2}px; top:${point.rectY - 2}px;
         width:${point.rectW + 4}px; height:${point.rectH + 4}px;
@@ -306,8 +306,8 @@
     });
     root.appendChild(outlineContainer);
 
-    window.__synthux_heatmap_points = points;
-    window.__synthux_heatmap_index = -1;
+    window.__enigmaux_heatmap_points = points;
+    window.__enigmaux_heatmap_index = -1;
 
     const totalIssues = points.reduce((s, p) => s + p.count, 0);
 
@@ -340,7 +340,7 @@
 
     // Info panel
     const infoPanel = document.createElement('div');
-    infoPanel.id = '__synthux-nav-info';
+    infoPanel.id = '__enigmaux-nav-info';
     infoPanel.style.cssText = 'padding:10px 14px;min-height:48px;border-bottom:1px solid rgba(255,255,255,0.06);';
     const infoText = document.createElement('div');
     infoText.style.cssText = 'font-size:11px;color:#52525b;';
@@ -359,17 +359,17 @@
     `;
 
     const prevBtn = document.createElement('button');
-    prevBtn.id = '__synthux-nav-prev';
+    prevBtn.id = '__enigmaux-nav-prev';
     prevBtn.style.cssText = btnStyle;
     prevBtn.textContent = '\u25B2';
 
     const counter = document.createElement('span');
-    counter.id = '__synthux-nav-counter';
+    counter.id = '__enigmaux-nav-counter';
     counter.style.cssText = 'flex:1;text-align:center;font-size:11px;color:#52525b;';
     counter.textContent = '\u2014';
 
     const nextBtn = document.createElement('button');
-    nextBtn.id = '__synthux-nav-next';
+    nextBtn.id = '__enigmaux-nav-next';
     nextBtn.style.cssText = btnStyle;
     nextBtn.textContent = '\u25BC';
 
@@ -384,25 +384,25 @@
     prevBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const idx = window.__synthux_heatmap_index;
-      const total = (window.__synthux_heatmap_points || []).length;
+      const idx = window.__enigmaux_heatmap_index;
+      const total = (window.__enigmaux_heatmap_points || []).length;
       if (total === 0) return;
       _navigateToIssue(idx <= 0 ? total - 1 : idx - 1);
     });
     nextBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const idx = window.__synthux_heatmap_index;
-      const total = (window.__synthux_heatmap_points || []).length;
+      const idx = window.__enigmaux_heatmap_index;
+      const total = (window.__enigmaux_heatmap_points || []).length;
       if (total === 0) return;
       _navigateToIssue(idx >= total - 1 ? 0 : idx + 1);
     });
   }
 
   function _navigateToIssue(index) {
-    const points = window.__synthux_heatmap_points || [];
+    const points = window.__enigmaux_heatmap_points || [];
     if (index < 0 || index >= points.length) return;
-    window.__synthux_heatmap_index = index;
+    window.__enigmaux_heatmap_index = index;
     const point = points[index];
     if (!point) return;
 
@@ -412,7 +412,7 @@
     const color = sevColors[sev] || sevColors.minor;
 
     // Always update counter first (so it never gets stuck)
-    const counter = document.getElementById('__synthux-nav-counter');
+    const counter = document.getElementById('__enigmaux-nav-counter');
     if (counter) {
       counter.style.color = color;
       counter.textContent = `${index + 1} of ${points.length}`;
@@ -429,8 +429,8 @@
     try {
       const container = document.getElementById(OUTLINES_ID);
       if (container) {
-        container.querySelectorAll('[data-synthux-index]').forEach(el => {
-          const i = parseInt(el.dataset.synthuxIndex);
+        container.querySelectorAll('[data-enigmaux-index]').forEach(el => {
+          const i = parseInt(el.dataset.enigmauxIndex);
           const p = points[i];
           const c = sevColors[p?.severity] || sevColors.minor;
           if (i === index) {
@@ -446,7 +446,7 @@
 
     // Update info panel
     try {
-      const info = document.getElementById('__synthux-nav-info');
+      const info = document.getElementById('__enigmaux-nav-info');
       if (info) {
         const issues = point.issues || [];
         const desc = (issues[0]?.description || '').toString();
@@ -474,8 +474,8 @@
       const el = document.getElementById(id);
       if (el) el.remove();
     });
-    delete window.__synthux_heatmap_points;
-    delete window.__synthux_heatmap_index;
+    delete window.__enigmaux_heatmap_points;
+    delete window.__enigmaux_heatmap_index;
   }
 
   // ─── Element Rects ─────────────────────────────────────────────────────────
@@ -620,5 +620,5 @@
   // Clean up on page unload
   window.addEventListener('beforeunload', clearAll);
 
-  console.info('[synthux] Overlay manager injected');
+  console.info('[enigmaux] Overlay manager injected');
 })();

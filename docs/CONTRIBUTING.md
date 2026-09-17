@@ -1,6 +1,6 @@
-# Contributing to synthux
+# Contributing to Enigma UX
 
-Thank you for your interest in contributing to synthux! 🎉
+Thank you for your interest in contributing to Enigma UX! 🎉
 
 ## Getting Started
 
@@ -14,8 +14,8 @@ Thank you for your interest in contributing to synthux! 🎉
 
 ```bash
 # Clone the repo
-git clone https://github.com/synthuxapp/synthux.git
-cd synthux
+git clone https://github.com/karanglobalseo-blip/enigma-ux.git
+cd enigma-ux
 
 # Install dependencies
 npm install
@@ -33,7 +33,7 @@ npm run dev
 2. Enable **Developer mode** (top right toggle)
 3. Click **Load unpacked**
 4. Select the `extension/` folder
-5. The synthux icon should appear in your toolbar
+5. The Enigma UX icon should appear in your toolbar
 
 ## Development Workflow
 
@@ -123,7 +123,7 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
 ## Reporting Issues
 
-Use [GitHub Issues](https://github.com/synthuxapp/synthux/issues) with the provided templates.
+Use [GitHub Issues](https://github.com/karanglobalseo-blip/enigma-ux/issues) with the provided templates.
 
 Include:
 - Chrome version

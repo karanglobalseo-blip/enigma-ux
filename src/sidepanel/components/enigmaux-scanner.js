@@ -1,15 +1,15 @@
 /**
- * synthux — Scanner Component
+ * enigmaux — Scanner Component
  * 
- * <synthux-scanner> — Main scanning control panel
+ * <enigmaux-scanner> — Main scanning control panel
  * Minimal design: profile toggles, mode selector, analyze button
  */
 
 import { LitElement, html, css } from 'lit';
 import { getCustomProfiles, saveCustomProfile, deleteCustomProfile } from '../../../extension/core/profiles.js';
-import './synthux-score.js';
+import './enigmaux-score.js';
 
-export class SynthuxScanner extends LitElement {
+export class EnigmaUXScanner extends LitElement {
   static properties = {
     ollamaStatus: { type: Object },
     isAnalyzing: { type: Boolean },
@@ -826,11 +826,11 @@ export class SynthuxScanner extends LitElement {
   async _loadSettings() {
     try {
       const data = await chrome.storage.local.get({
-        synthux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
-        synthux_selected_mode: 'deep'
+        enigmaux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
+        enigmaux_selected_mode: 'deep'
       });
-      this.selectedProfiles = data.synthux_selected_profiles;
-      this.mode = data.synthux_selected_mode;
+      this.selectedProfiles = data.enigmaux_selected_profiles;
+      this.mode = data.enigmaux_selected_mode;
       this.requestUpdate();
     } catch {}
   }
@@ -956,13 +956,13 @@ export class SynthuxScanner extends LitElement {
       profiles.push(profileId);
     }
     this.selectedProfiles = profiles;
-    chrome.storage.local.set({ synthux_selected_profiles: profiles });
+    chrome.storage.local.set({ enigmaux_selected_profiles: profiles });
   }
 
   _setMode(mode) {
     if (!this.isAnalyzing) {
       this.mode = mode;
-      chrome.storage.local.set({ synthux_selected_mode: mode });
+      chrome.storage.local.set({ enigmaux_selected_mode: mode });
     }
   }
 
@@ -981,7 +981,7 @@ export class SynthuxScanner extends LitElement {
         }
       });
     } catch (err) {
-      console.error('[synthux] Failed to start analysis:', err);
+      console.error('[enigmaux] Failed to start analysis:', err);
       this.dispatchEvent(new CustomEvent('analysis-end'));
     }
   }
@@ -1086,7 +1086,7 @@ export class SynthuxScanner extends LitElement {
       this.selectedProfiles = this.selectedProfiles.filter(p => p !== id);
       await this._loadCustomProfiles();
     } catch (err) {
-      console.error('[synthux] Failed to delete profile:', err);
+      console.error('[enigmaux] Failed to delete profile:', err);
     }
   }
 
@@ -1128,7 +1128,7 @@ export class SynthuxScanner extends LitElement {
       this._editingProfile = null;
       await this._loadCustomProfiles();
     } catch (err) {
-      console.error('[synthux] Failed to save profile:', err);
+      console.error('[enigmaux] Failed to save profile:', err);
     }
   }
 
@@ -1240,7 +1240,7 @@ export class SynthuxScanner extends LitElement {
 
           <div class="terminal">
             <div class="terminal-header">
-              <span class="terminal-title">synthux — analysis</span>
+              <span class="terminal-title">enigmaux — analysis</span>
             </div>
             <div class="terminal-body" id="terminal-log">
               ${this.logEntries.map((entry, i) => html`
@@ -1399,4 +1399,4 @@ export class SynthuxScanner extends LitElement {
   }
 }
 
-customElements.define('synthux-scanner', SynthuxScanner);
+customElements.define('enigmaux-scanner', EnigmaUXScanner);
