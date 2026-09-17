@@ -159,17 +159,29 @@ export class Analyzer {
           if (this.dualMode && safeScreenshot) {
             // Both perspectives are independent so a slow/failing vision request
             // does not prevent the text result from being used.
-            const [textResponse, visionResponse] = await Promise.all([
+            const [textAttempt, visionAttempt] = await Promise.allSettled([
               this.textClient.evaluate(prompt, { ...requestOptions, model: this.textModel, images: [] }),
               this.visionClient.evaluate(prompt, { ...requestOptions, model: this.visionModel, images: [safeScreenshot] })
             ]);
+            const textResponse = textAttempt.status === 'fulfilled'
+              ? textAttempt.value
+              : { success: false, error: textAttempt.reason?.message || 'Text evaluation failed' };
+            const visionResponse = visionAttempt.status === 'fulfilled'
+              ? visionAttempt.value
+              : { success: false, error: visionAttempt.reason?.message || 'Vision evaluation failed' };
             const successful = [
               textResponse.success ? normalizeResult(parseEvaluation(textResponse.result), 'text') : null,
               visionResponse.success ? normalizeResult(parseEvaluation(visionResponse.result), 'vision') : null
             ].filter(Boolean);
             response = successful.length
               ? { success: true, result: mergeResults(successful), meta: { dual: true, sources: successful.map(r => r.source) } }
-              : { success: false, error: textResponse.error || visionResponse.error || 'Dual evaluation failed' };
+              : {
+                success: false,
+                error: [
+                  `Text: ${textResponse.error || 'failed'}`,
+                  `Vision: ${visionResponse.error || 'failed'}`
+                ].join(' | ')
+              };
           } else {
             response = await this.client.evaluate(prompt, {
               ...requestOptions,
@@ -209,7 +221,8 @@ export class Analyzer {
               summary: `Unable to evaluate: ${response.error || 'Unknown error'}`,
               issues: [],
               positives: [],
-              scoreJustification: 'Default score — AI evaluation failed'
+              scoreJustification: 'Default score — AI evaluation failed',
+              error: response.error || 'Unknown AI evaluation error'
             });
           }
         } catch (err) {
@@ -224,7 +237,8 @@ export class Analyzer {
             summary: `Evaluation error: ${err.message}`,
             issues: [],
             positives: [],
-            scoreJustification: 'Default score — evaluation error'
+            scoreJustification: 'Default score — evaluation error',
+            error: err.message
           });
         }
       }

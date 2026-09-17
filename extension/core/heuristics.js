@@ -123,9 +123,9 @@ ${profile.systemPrompt}
 export function parseEvaluation(response) {
   try {
     let data;
-    const rawText = typeof response === 'string' 
-      ? response 
-      : (response?.raw || JSON.stringify(response));
+    const rawText = typeof response === 'string'
+      ? response
+      : (response?.raw || response?.response || JSON.stringify(response));
 
     // Try progressive parse strategies
     data = tryParseJSON(rawText);
@@ -168,7 +168,7 @@ export function parseEvaluation(response) {
       .filter(p => p.length > 3 && !isPlaceholder(p));
 
     return {
-      score: Math.max(0, Math.min(100, parseInt(data.score) || 50)),
+      score: normalizeScore(data.score),
       summary: isPlaceholder(data.summary) ? 'Evaluation completed' : String(data.summary || 'Evaluation completed').trim(),
       issues: validIssues,
       positives: validPositives,
@@ -183,6 +183,11 @@ export function parseEvaluation(response) {
       positives: [],
       scoreJustification: 'Default score due to parse error'
     };
+  }
+
+  function normalizeScore(value) {
+    const score = Number.parseInt(String(value).replace(/[^\d-]/g, ''), 10);
+    return Number.isFinite(score) ? Math.max(0, Math.min(100, score)) : 50;
   }
 }
 

@@ -75,6 +75,13 @@ function generateMarkdown(data) {
   lines.push(`| **AI Model** | ${model} (${data.provider || 'Ollama'}) |`);
   const modeLabel = mode === 'deep' ? '🔬 Deep (10 heuristics)' : mode === 'custom' ? '🎯 Custom' : '⚡ Quick (3 heuristics)';
   lines.push(`| **Mode** | ${modeLabel} |`);
+  const evaluationErrors = Object.values(profileResults || {})
+    .flatMap(profile => profile.evaluations || [])
+    .map(evaluation => evaluation.error)
+    .filter(Boolean);
+  if (evaluationErrors.length > 0) {
+    lines.push(`| **AI Warning** | ${evaluationErrors[0]} |`);
+  }
   if (data.costSummary) {
     lines.push(`| **Cost** | ${data.costSummary.formatted} |`);
   }
@@ -110,7 +117,8 @@ function generateMarkdown(data) {
     pr.evaluations.forEach(ev => {
       const name = ev.heuristicName?.en || ev.heuristicName;
       const emoji = getScoreEmoji(ev.score);
-      lines.push(`| ${name} | ${ev.score}/100 | ${emoji} |`);
+      const status = ev.error ? `❌ ${ev.error}` : emoji;
+      lines.push(`| ${name} | ${ev.score}/100 | ${status} |`);
     });
     lines.push('');
 
