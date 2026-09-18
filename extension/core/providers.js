@@ -9,6 +9,12 @@
 
 // ─── Provider Registry ──────────────────────────────────────────────────────
 
+function normalizeOpenAIBase(endpoint) {
+  return String(endpoint || '')
+    .replace(/\/+$/, '')
+    .replace(/\/v1(?:\/chat\/completions)?$/, '');
+}
+
 export const PROVIDERS = {
   ollama: {
     id: 'ollama',
@@ -252,12 +258,13 @@ export const PROVIDERS = {
     modelsFetchable: true,
 
     buildRequest(prompt, model, options = {}) {
+      const base = normalizeOpenAIBase(options.endpoint || this.defaultEndpoint);
       const content = [{ type: 'text', text: prompt }];
       (options.images || []).filter(Boolean).forEach(image => {
         content.push({ type: 'image_url', image_url: { url: image, detail: 'low' } });
       });
       return {
-        url: `${options.endpoint || this.defaultEndpoint}/v1/chat/completions`,
+        url: `${base}/v1/chat/completions`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -292,7 +299,7 @@ export const PROVIDERS = {
 
     async fetchModels(endpoint, apiKey) {
       try {
-        const res = await fetch(`${endpoint || this.defaultEndpoint}/v1/models`, {
+        const res = await fetch(`${normalizeOpenAIBase(endpoint || this.defaultEndpoint)}/v1/models`, {
           headers: { Authorization: `Bearer ${apiKey || ''}` },
           signal: AbortSignal.timeout(8000)
         });
@@ -308,7 +315,7 @@ export const PROVIDERS = {
 
     async ping(endpoint, apiKey) {
       try {
-        const res = await fetch(`${endpoint || this.defaultEndpoint}/v1/models`, {
+        const res = await fetch(`${normalizeOpenAIBase(endpoint || this.defaultEndpoint)}/v1/models`, {
           headers: { Authorization: `Bearer ${apiKey || ''}` },
           signal: AbortSignal.timeout(8000)
         });
