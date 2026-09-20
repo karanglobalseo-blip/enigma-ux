@@ -17,6 +17,7 @@ export class EnigmaUXScanner extends LitElement {
     pageInfo: { type: Object },
     selectedProfiles: { type: Array },
     mode: { type: String },
+    viewportSettings: { type: Object },
     logEntries: { type: Array },
     customProfiles: { type: Array },
     _showProfileForm: { type: Boolean, state: true },
@@ -70,6 +71,24 @@ export class EnigmaUXScanner extends LitElement {
       text-transform: uppercase;
       letter-spacing: 0.8px;
       margin-bottom: 10px;
+    }
+
+    .settings-card {
+      background: var(--sx-bg-card, #1c1c1f);
+      border: 1px solid var(--sx-border, rgba(255,255,255,0.06));
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .field-input, .field-select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px 10px;
+      background: var(--sx-bg-input, #141416);
+      border: 1px solid var(--sx-border, rgba(255,255,255,0.06));
+      border-radius: 6px;
+      color: var(--sx-text-primary, #ededf0);
+      font: inherit;
     }
 
     /* ─── Profile Cards ──────────────────────── */
@@ -797,6 +816,7 @@ export class EnigmaUXScanner extends LitElement {
     this.pageInfo = null;
     this.selectedProfiles = ['first-time', 'power-user', 'accessibility'];
     this.mode = 'deep';
+    this.viewportSettings = { viewportMode: 'desktop', viewportWidth: 1280, viewportHeight: 800 };
     this.logEntries = [];
     this.customProfiles = [];
     this._showProfileForm = false;
@@ -827,10 +847,12 @@ export class EnigmaUXScanner extends LitElement {
     try {
       const data = await chrome.storage.local.get({
         enigmaux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
-        enigmaux_selected_mode: 'deep'
+        enigmaux_selected_mode: 'deep',
+        viewportSettings: { viewportMode: 'desktop', viewportWidth: 1280, viewportHeight: 800 }
       });
       this.selectedProfiles = data.enigmaux_selected_profiles;
       this.mode = data.enigmaux_selected_mode;
+      this.viewportSettings = data.viewportSettings;
       this.requestUpdate();
     } catch {}
   }
@@ -966,6 +988,16 @@ export class EnigmaUXScanner extends LitElement {
     }
   }
 
+  _setViewportMode(mode) {
+    this.viewportSettings = { ...this.viewportSettings, viewportMode: mode };
+    chrome.storage.local.set({ viewportSettings: this.viewportSettings });
+  }
+
+  _setViewportDimension(key, value) {
+    this.viewportSettings = { ...this.viewportSettings, [key]: value };
+    chrome.storage.local.set({ viewportSettings: this.viewportSettings });
+  }
+
   async _startAnalysis() {
     if (this.isAnalyzing || !this.ollamaStatus?.connected) return;
     this.dispatchEvent(new CustomEvent('analysis-start'));
@@ -977,7 +1009,8 @@ export class EnigmaUXScanner extends LitElement {
           profiles: this.selectedProfiles,
           ...(this.mode === 'custom' && this._selectedHeuristics.length > 0
             ? { heuristics: this._selectedHeuristics }
-            : {})
+            : {}),
+          viewportSettings: this.viewportSettings
         }
       });
     } catch (err) {
@@ -1200,6 +1233,31 @@ export class EnigmaUXScanner extends LitElement {
           <span class="mode-label">Custom</span>
           <span class="mode-desc">${this._selectedHeuristics.length || 0} selected${this._selectedHeuristics.length > 0 ? ` · ~${this._estimateTime(this._selectedHeuristics.length)}` : ''}</span>
         </button>
+      </div>
+
+      <div class="section-header">Analysis Viewport</div>
+      <div class="settings-card" style="margin-bottom: 16px;">
+        <select class="field-select" .value="${this.viewportSettings.viewportMode}"
+          @change="${(e) => this._setViewportMode(e.target.value)}">
+          <option value="desktop">Desktop — 1440 × 900</option>
+          <option value="mobile">Mobile — 390 × 844</option>
+          <option value="custom">Custom resolution</option>
+        </select>
+        ${this.viewportSettings.viewportMode === 'custom' ? html`
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <input class="field-input" type="number" min="320" max="3840"
+              .value="${this.viewportSettings.viewportWidth}"
+              @change="${(e) => this._setViewportDimension('viewportWidth', e.target.value)}"
+              aria-label="Viewport width" placeholder="Width" />
+            <input class="field-input" type="number" min="480" max="2160"
+              .value="${this.viewportSettings.viewportHeight}"
+              @change="${(e) => this._setViewportDimension('viewportHeight', e.target.value)}"
+              aria-label="Viewport height" placeholder="Height" />
+          </div>
+        ` : ''}
+        <div style="font-size: 10px; color: var(--sx-text-tertiary, #8a8a96); margin-top: 6px;">
+          DOM, responsive breakpoints, and screenshots use this emulated viewport.
+        </div>
       </div>
 
       ${this.mode === 'custom' ? html`

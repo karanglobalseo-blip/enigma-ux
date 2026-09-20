@@ -315,10 +315,34 @@ function showReceipt(pages) {
         <span class="receipt-row__label">Est. cost</span>
         <span class="receipt-row__value" id="receipt-cost">Calculating...</span>
       </div>
+      <div class="receipt-row" style="margin-top:10px;">
+        <label class="receipt-row__label" for="flow-viewport-mode">Analysis viewport</label>
+        <select id="flow-viewport-mode" class="popover__input">
+          <option value="desktop">Desktop — 1440 × 900</option>
+          <option value="mobile">Mobile — 390 × 844</option>
+          <option value="custom">Custom resolution</option>
+        </select>
+      </div>
+      <div id="flow-custom-viewport" class="receipt-row" style="display:none; gap:8px; margin-top:8px;">
+        <input id="flow-viewport-width" class="popover__input" type="number" min="320" max="3840" value="1280" placeholder="Width">
+        <input id="flow-viewport-height" class="popover__input" type="number" min="480" max="2160" value="800" placeholder="Height">
+      </div>
     </div>
   `;
 
   receiptModal.hidden = false;
+  const viewportMode = document.getElementById('flow-viewport-mode');
+  const customViewport = document.getElementById('flow-custom-viewport');
+  viewportMode.addEventListener('change', () => {
+    customViewport.style.display = viewportMode.value === 'custom' ? 'flex' : 'none';
+  });
+  chrome.storage.local.get({ viewportSettings: { viewportMode: 'desktop', viewportWidth: 1280, viewportHeight: 800 } })
+    .then(({ viewportSettings }) => {
+      viewportMode.value = viewportSettings.viewportMode || 'desktop';
+      document.getElementById('flow-viewport-width').value = viewportSettings.viewportWidth || 1280;
+      document.getElementById('flow-viewport-height').value = viewportSettings.viewportHeight || 800;
+      customViewport.style.display = viewportMode.value === 'custom' ? 'flex' : 'none';
+    }).catch(() => {});
 
   // Fetch provider info
   chrome.runtime.sendMessage({ type: 'GET_SETTINGS' }).then(settings => {
@@ -360,6 +384,13 @@ async function startFlowAnalysis() {
   const pages = canvas.getPages();
   const connectors = canvas.getConnectors();
   const notes = canvas.getNotes();
+  const viewportMode = document.getElementById('flow-viewport-mode')?.value || 'desktop';
+  const viewportSettings = {
+    viewportMode,
+    viewportWidth: document.getElementById('flow-viewport-width')?.value || 1280,
+    viewportHeight: document.getElementById('flow-viewport-height')?.value || 800
+  };
+  await chrome.storage.local.set({ viewportSettings });
 
   // Clear previous analysis results from canvas
   canvas.clearAllResults();
@@ -386,7 +417,7 @@ async function startFlowAnalysis() {
   try {
     const result = await chrome.runtime.sendMessage({
       type: 'START_FLOW_ANALYSIS',
-      payload: { pages, connectors, notes }
+      payload: { pages, connectors, notes, viewportSettings }
     });
 
     if (result?.error) {

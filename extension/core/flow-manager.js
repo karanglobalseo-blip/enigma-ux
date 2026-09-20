@@ -9,6 +9,7 @@ import { AIClient } from './ai-client.js';
 import { captureScreenshot } from './screenshot.js';
 import { getProfileAsync } from './profiles.js';
 import { checkVisionSupport } from './providers.js';
+import { applyViewport, clearViewport, resolveViewport } from './viewport.js';
 
 export class FlowManager {
   constructor(options = {}) {
@@ -41,8 +42,15 @@ export class FlowManager {
       active: false
     });
     this._analyzeTabId = analyzeTab.id;
+    let viewportApplied = false;
 
     try {
+      try {
+        await applyViewport(analyzeTab.id, settings.viewportSettings || { viewportMode: 'desktop' });
+        viewportApplied = true;
+      } catch (error) {
+        console.warn('[flow] Could not apply analysis viewport:', error.message);
+      }
       for (let i = 0; i < pages.length; i++) {
         if (this.cancelled) break;
 
@@ -108,6 +116,7 @@ export class FlowManager {
         });
       }
     } finally {
+      if (viewportApplied) await clearViewport(analyzeTab.id).catch(() => {});
       // Clean up background tab
       try {
         await chrome.tabs.remove(analyzeTab.id);
@@ -184,7 +193,8 @@ export class FlowManager {
       transitions: aiResult.transitions || [],
       notes: enrichedNotes,
       connectors,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      viewport: resolveViewport(settings.viewportSettings || { viewportMode: 'desktop' })
     };
   }
 

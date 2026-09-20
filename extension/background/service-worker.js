@@ -14,6 +14,7 @@ import { Analyzer } from '../core/analyzer.js';
 import { getProvider } from '../core/providers.js';
 import { captureScreenshot } from '../core/screenshot.js';
 import { FlowManager } from '../core/flow-manager.js';
+import { applyViewport, clearViewport, resolveViewport } from '../core/viewport.js';
 
 // ─── Side Panel Management ───────────────────────────────────────────────────
 
@@ -308,7 +309,8 @@ async function handleStartAnalysis(options) {
       apiKey_nvidia: '',
       apiKey_openai: '',
       apiKey_gemini: '',
-      apiKey_claude: ''
+      apiKey_claude: '',
+      viewportSettings: { viewportMode: 'desktop', viewportWidth: 1280, viewportHeight: 800 }
     });
 
     const mode = options?.mode || settings.analysisMode;
@@ -316,6 +318,20 @@ async function handleStartAnalysis(options) {
     const customHeuristics = options?.heuristics || null;
 
     // Create analyzer
+    const viewportSettings = options?.viewportSettings || settings.viewportSettings || { viewportMode: 'desktop' };
+    let viewportApplied = false;
+    try {
+      await applyViewport(tab.id, viewportSettings);
+      viewportApplied = true;
+      const viewport = resolveViewport(viewportSettings);
+      broadcastToSidePanel({
+        type: 'ANALYSIS_PROGRESS',
+        payload: { phase: 'scanning', percent: 2, message: `Using ${viewport.width}×${viewport.height} ${viewport.mobile ? 'mobile' : 'desktop'} viewport...` }
+      });
+    } catch (error) {
+      console.warn('[enigmaux] Could not apply analysis viewport:', error.message);
+    }
+
     const analyzer = new Analyzer({
       endpoint: settings.ollamaEndpoint,
       model: settings.ollamaModel,
@@ -415,6 +431,8 @@ async function handleStartAnalysis(options) {
       screenshot,
       timestamp: new Date().toISOString()
     });
+    if (viewportApplied) await clearViewport(tab.id);
+    report.viewport = resolveViewport(viewportSettings);
 
     // Step 4: Store report and add to history (strip screenshot to save storage)
     const reportForStorage = { ...report };
@@ -436,6 +454,9 @@ async function handleStartAnalysis(options) {
 
     return { success: true, report };
   } catch (err) {
+    if (currentAnalysis?.tabId) {
+      await clearViewport(currentAnalysis.tabId).catch(() => {});
+    }
     currentAnalysis = null;
 
     if (err.message === 'Analysis cancelled') {
@@ -641,7 +662,8 @@ async function handleFlowAnalysis(payload, sender) {
     providerId: 'ollama',
     apiKey: '',
     enigmaux_selected_profiles: ['first-time', 'power-user', 'accessibility'],
-    enigmaux_selected_mode: 'deep'
+    enigmaux_selected_mode: 'deep',
+    viewportSettings: { viewportMode: 'desktop', viewportWidth: 1280, viewportHeight: 800 }
   });
 
   const flowManager = new FlowManager({
@@ -669,7 +691,7 @@ async function handleFlowAnalysis(payload, sender) {
     pages: payload.pages || [],
     connectors: payload.connectors || [],
     notes: payload.notes || [],
-    settings,
+    settings: { ...settings, viewportSettings: payload.viewportSettings || settings.viewportSettings },
     profiles: settings.enigmaux_selected_profiles,
     mode: settings.enigmaux_selected_mode,
     sourceTabId: sender.tab?.id || null
