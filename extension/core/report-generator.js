@@ -134,9 +134,11 @@ function generateMarkdown(data) {
         const priorityTag = issue.priority === 'high' ? ' **[HIGH]**' : issue.priority === 'low' ? ' [low]' : '';
         const effortTag = issue.fixEffort === 'easy' ? ' ⚡' : issue.fixEffort === 'hard' ? ' 🔧' : '';
         const qwTag = (issue.priority === 'high' && issue.fixEffort === 'easy') ? ' 🏆 Quick Win' : '';
-        lines.push(`- ${icon} **[${issue.severity}]**${priorityTag}${effortTag}${qwTag} ${issue.description}`);
-        lines.push(`  - Element: ${issue.element}`);
-        lines.push(`  - 💡 Recommendation: ${issue.recommendation}`);
+        lines.push(`- ${icon} **[${issue.severity}]**${priorityTag}${effortTag}${qwTag} ${issue.userSummary || issue.description}`);
+        if (issue.whyItMatters) lines.push(`  - **Why it matters:** ${issue.whyItMatters}`);
+        lines.push(`  - **Design recommendation:** ${issue.designRecommendation || issue.recommendation}`);
+        lines.push(`  - **Implementation handoff:** ${issue.recommendation}`);
+        lines.push(`  - **Location:** ${issue.element || 'Not anchored'}`);
         if (issue.codeFix) {
           lines.push(`  - **Fix (${issue.codeFix.language}):**`);
           if (issue.codeFix.before) {

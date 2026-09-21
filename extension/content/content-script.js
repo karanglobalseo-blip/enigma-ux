@@ -93,6 +93,7 @@ function extractStructure() {
     headings.push({
       level: parseInt(h.tagName[1]),
       text: h.textContent.trim().substring(0, 200),
+      selector: getUniqueSelector(h),
       order: index
     });
   });
@@ -244,6 +245,7 @@ function extractContent() {
   document.querySelectorAll('button, [role="button"], a.btn, a.button, a[class*="cta"], input[type="submit"]').forEach(el => {
     ctas.push({
       text: el.textContent.trim().substring(0, 100),
+      selector: getUniqueSelector(el),
       type: el.tagName.toLowerCase(),
       tag: el.tagName.toLowerCase(),
       isDisabled: el.disabled || el.getAttribute('aria-disabled') === 'true',
@@ -423,14 +425,29 @@ function extractMenuItems(navElement, depth = 0) {
 }
 
 function describeElement(el) {
-  let desc = el.tagName.toLowerCase();
-  if (el.id) desc += `#${el.id}`;
-  if (el.className && typeof el.className === 'string') {
-    desc += '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.');
+  return getUniqueSelector(el);
+}
+
+function getUniqueSelector(el) {
+  if (el.id) return `#${CSS.escape(el.id)}`;
+  const parts = [];
+  let current = el;
+  while (current && current.nodeType === Node.ELEMENT_NODE && current !== document.body) {
+    let part = current.tagName.toLowerCase();
+    const classes = typeof current.className === 'string'
+      ? current.className.trim().split(/\s+/).filter(Boolean).slice(0, 2)
+      : [];
+    if (classes.length) part += classes.map(name => `.${CSS.escape(name)}`).join('');
+    const siblings = current.parentElement
+      ? [...current.parentElement.children].filter(sibling => sibling.tagName === current.tagName)
+      : [];
+    if (siblings.length > 1) part += `:nth-of-type(${siblings.indexOf(current) + 1})`;
+    parts.unshift(part);
+    const candidate = parts.join(' > ');
+    if (document.querySelectorAll(candidate).length === 1) return candidate;
+    current = current.parentElement;
   }
-  const text = el.textContent?.trim().substring(0, 50);
-  if (text) desc += ` "${text}"`;
-  return desc;
+  return parts.join(' > ');
 }
 
 function getAccessibleName(el) {

@@ -292,6 +292,35 @@ export class EnigmaUXReport extends LitElement {
       line-height: 1.4;
     }
 
+    .audience-label {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      color: var(--sx-text-tertiary, #8a8a96);
+      margin: 8px 0 3px;
+    }
+
+    .design-guidance {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--sx-text-primary, #ededf0);
+    }
+
+    .location-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      background: var(--sx-accent-dim, rgba(59,130,246,.1));
+      color: var(--sx-accent, #3b82f6);
+      font-size: 10px;
+      cursor: pointer;
+    }
+
     .issue-element {
       font-size: 10px;
       color: var(--sx-text-tertiary, #8a8a96);
@@ -719,6 +748,10 @@ export class EnigmaUXReport extends LitElement {
     }).catch(() => {});
   }
 
+  _showIssue(issue) {
+    this._highlightIssue(issue);
+  }
+
   _toggleHeatmap() {
     this.heatmapActive = !this.heatmapActive;
 
@@ -875,18 +908,35 @@ export class EnigmaUXReport extends LitElement {
                       <span class="severity-dot ${issue.severity}"></span>
                       <div class="issue-content">
                         <div class="issue-desc">
-                          ${issue.description}
+                          ${issue.userSummary || issue.description}
                           ${issue.isQuickWin ? html`<span class="priority-badge quick-win">⚡ Quick Win</span>` : 
                             issue.priority === 'high' ? html`<span class="priority-badge high">HIGH</span>` : ''}
                           ${issue.fixEffort === 'easy' ? html`<span class="effort-tag easy">Easy fix</span>` :
                             issue.fixEffort === 'hard' ? html`<span class="effort-tag hard">Hard</span>` : ''}
                         </div>
-                        ${issue.element ? html`<div class="issue-element">${issue.element}</div>` : ''}
-                        ${issue.recommendation ? html`<div class="issue-recommendation">${issue.recommendation}</div>` : ''}
+                        ${issue.element ? html`
+                          <button class="location-chip" @click="${(e) => { e.stopPropagation(); this._showIssue(issue); }}">
+                            Show me where
+                          </button>
+                        ` : ''}
+                        ${issue.whyItMatters ? html`
+                          <div class="audience-label">Why it matters</div>
+                          <div class="design-guidance">${issue.whyItMatters}</div>
+                        ` : ''}
+                        ${issue.designRecommendation || issue.recommendation ? html`
+                          <div class="audience-label">Design recommendation</div>
+                          <div class="design-guidance">${issue.designRecommendation || issue.recommendation}</div>
+                        ` : ''}
+                        ${issue.element ? html`
+                          <details style="margin-top: 7px;">
+                            <summary style="font-size: 10px; color: var(--sx-text-tertiary, #8a8a96); cursor: pointer;">Implementation details</summary>
+                            <div class="issue-element">${issue.element}</div>
+                          </details>
+                        ` : ''}
                         ${issue.codeFix ? html`
                           <div class="code-fix-block">
                             <div class="code-fix-header">
-                              <span>${issue.codeFix.language.toUpperCase()} fix</span>
+                              <span>Implementation handoff · ${issue.codeFix.language.toUpperCase()} fix</span>
                               <button class="code-fix-copy ${this.copiedFix === issue.element ? 'copied' : ''}" 
                                 @click="${(e) => { e.stopPropagation(); this._copyFix(issue); }}">
                                 ${this.copiedFix === issue.element ? 'Copied ✓' : 'Copy'}

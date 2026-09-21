@@ -88,7 +88,9 @@ ${profile.systemPrompt}
 5. Score must be a number between 0 and 100.
 6. For each issue, provide a concrete code fix showing the before/after code change. Use CSS, HTML, or JavaScript as appropriate.
 7. For each issue, rate the priority (impact on users: high/medium/low) and fix_effort (how hard it is to fix: easy/moderate/hard).
-8. For each issue, the "element" field MUST be a valid CSS selector that uniquely identifies the problematic element on the page (e.g. "nav.main-menu > ul > li:nth-child(2)", "input#email", ".hero-section .cta-button"). This is critical for page highlighting.${hasVision ? '\n9. When the screenshot reveals visual issues not apparent from DOM data alone, include them as findings.' : ''}
+8. For each issue, the "element" field MUST be a valid CSS selector that uniquely identifies the problematic element on the page (e.g. "nav.main-menu > ul > li:nth-child(2)", "input#email", ".hero-section .cta-button"). This is critical for page highlighting.
+9. Write user_summary, why_it_matters, and design_recommendation for a designer or product manager. Avoid code, DOM terminology, WCAG jargon, and developer-only language in these fields.
+10. Keep recommendation and code_fix technical and implementation-focused for the engineering handoff.${hasVision ? '\n11. When the screenshot reveals visual issues not apparent from DOM data alone, include them as findings.' : ''}
 
 ## Required JSON Structure
 {
@@ -102,6 +104,9 @@ ${profile.systemPrompt}
       "description": "Form inputs in the search section have no associated label elements",
       "element": "input.search-field",
       "recommendation": "Add a visible label element or aria-label attribute to each form input",
+      "user_summary": "People may not know what information to enter here.",
+      "why_it_matters": "Clear labels reduce hesitation and mistakes.",
+      "design_recommendation": "Use a visible, plain-language label placed above the field.",
       "code_fix": {
         "language": "html",
         "before": "<input type=\\"text\\" class=\\"search-field\\" placeholder=\\"Search...\\">",
@@ -150,6 +155,9 @@ export function parseEvaluation(response) {
           description: String(issue.description || '').trim(),
           element: String(issue.element || '').trim(),
           recommendation: String(issue.recommendation || '').trim(),
+          userSummary: String(issue.user_summary || issue.userSummary || issue.description || '').trim(),
+          whyItMatters: String(issue.why_it_matters || issue.whyItMatters || '').trim(),
+          designRecommendation: String(issue.design_recommendation || issue.designRecommendation || issue.recommendation || '').trim(),
           codeFix: parseCodeFix(issue.code_fix)
         };
       })
@@ -414,6 +422,7 @@ function summarizePageData(pageData) {
       parts.push(`  - H1 count: ${h1Count}`);
       const headingOrder = headings.map(h => `H${h.level}`).join(' → ');
       parts.push(`  - Order: ${headingOrder}`);
+      parts.push(`  - Section anchors: ${headings.slice(0, 20).map(h => `"${h.text}" → ${h.selector}`).join('; ')}`);
     }
     parts.push(`**Landmarks:** ${landmarks?.length || 0} (${landmarks?.map(l => l.role).join(', ') || 'none'})`);
     parts.push(`**Forms:** ${forms?.length || 0}`);
@@ -442,6 +451,9 @@ function summarizePageData(pageData) {
     parts.push(`  - Text length: ${pageData.content.textLength || 0} chars, ${pageData.content.wordCount || 0} words`);
     parts.push(`  - Images: ${pageData.content.imageCount || 0} total, ${pageData.content.imagesWithoutAlt || 0} without alt text`);
     parts.push(`  - CTAs: ${pageData.content.ctas?.length || 0}`);
+    if (pageData.content.ctas?.length) {
+      parts.push(`  - CTA anchors: ${pageData.content.ctas.slice(0, 20).map(c => `"${c.text}" → ${c.selector}`).join('; ')}`);
+    }
     parts.push(`  - Links: ${pageData.content.internalLinks || 0} internal, ${pageData.content.externalLinks || 0} external`);
   }
 
